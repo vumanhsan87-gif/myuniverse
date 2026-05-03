@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  basePath: '/myuniverse',
   output: 'export',
   trailingSlash: true,
   images: {

@@ -3,11 +3,9 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
-const BASE_PATH = '/myuniverse';
-
 const sections = [
   {
-    href: '/academic',
+    href: '/academic/',
     title: '保研与大学',
     subtitle: '价值增长星系',
     description: '大学经历与成就',
@@ -15,7 +13,7 @@ const sections = [
     tags: ['技术类', '经管', '实习'],
   },
   {
-    href: '/life',
+    href: '/life/',
     title: '保命与生活',
     subtitle: '生态维生星系',
     description: '健康、幽默与日常',
@@ -45,7 +43,7 @@ export default function DirectoryNav() {
             viewport={{ once: true }}
             transition={{ delay: index * 0.2 }}
           >
-            <Link href={`${BASE_PATH}${section.href}`}>
+            <Link href={section.href}>
               <div
                 className={`relative p-8 cursor-pointer transition-all duration-300 hover:scale-105 glass-card ${
                   section.color === 'academic'

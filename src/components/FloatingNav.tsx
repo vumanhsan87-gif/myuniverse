@@ -4,12 +4,10 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 
-const BASE_PATH = '/myuniverse';
-
 const navPoints = [
   { id: 'home', href: '/', label: '主页' },
-  { id: 'academic', href: '/academic', label: '保研与大学' },
-  { id: 'life', href: '/life', label: '保命与生活' },
+  { id: 'academic', href: '/academic/', label: '保研与大学' },
+  { id: 'life', href: '/life/', label: '保命与生活' },
 ];
 
 export default function FloatingNav() {
@@ -23,9 +21,9 @@ export default function FloatingNav() {
     >
       <div className="flex flex-col gap-4">
         {navPoints.map((point) => {
-          const isActive = pathname === point.href;
+          const isActive = pathname === point.href || (point.href !== '/' && pathname.startsWith(point.href));
           return (
-            <Link key={point.id} href={`${BASE_PATH}${point.href}`}>
+            <Link key={point.id} href={point.href}>
               <motion.div
                 className="relative flex items-center justify-end"
                 whileHover={{ x: -5 }}
