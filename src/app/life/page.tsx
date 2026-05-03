@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useState } from 'react';
-import { lifeSections, books, exercises, ideas, type Link } from '@/data/life';
+import { lifeSections, books, exercises, ideas, type Link, getImagePath } from '@/data/life';
 
 // 获取链接图标
 function LinkIcon({ type }: { type?: string }) {
@@ -94,7 +94,7 @@ function DetailModal({
               {images.map((img, i) => (
                 <div key={i} className="relative aspect-video rounded-lg overflow-hidden">
                   <Image
-                    src={img}
+                    src={getImagePath(img)}
                     alt={`图片 ${i + 1}`}
                     fill
                     className="object-cover"

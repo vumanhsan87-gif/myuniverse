@@ -3,11 +3,14 @@
  * 直接在这里添加或修改内容即可
  */
 
+const BASE_PATH = '/myuniverse';
+
 // ============ 图片和链接的添加方法 ============
 //
 // 【图片】
 // 1. 把图片放到 public/images/academic/ 文件夹下
 // 2. 在数据中添加 images 字段，格式：['/images/academic/图片文件名.png']
+//    （系统会自动添加 BASE_PATH 前缀）
 //
 // 【链接（视频/飞书文档等）】
 // 1. 添加 links 字段，格式：
@@ -78,6 +81,11 @@ export interface Link {
   url: string;
   type?: 'bilibili' | 'feishu' | 'other';
   description?: string;
+}
+
+// 图片路径工具函数
+export function getImagePath(path: string): string {
+  return `${BASE_PATH}${path}`;
 }
 
 export const tags = [

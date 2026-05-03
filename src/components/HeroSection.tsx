@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import { ideas } from '@/data/life';
 
+const BASE_PATH = '/myuniverse';
+
 // 详情弹窗组件
 function DetailModal({
   title,
@@ -112,7 +114,7 @@ export default function HeroSection() {
       >
         <div className="relative w-full" style={{ height: '60vh' }}>
           <img
-            src="/images/hero/home-hero.png"
+            src={`${BASE_PATH}/images/hero/home-hero.png`}
             alt="刘宇微 - 致广大而尽精微"
             className="w-full h-full object-contain object-center"
           />
@@ -121,7 +123,7 @@ export default function HeroSection() {
 
       {/* 可点击的导航区域 - 覆盖在图片上 */}
       <div className="relative w-full max-w-4xl -mt-32 z-10">
-        <Link href="/academic">
+        <Link href={`${BASE_PATH}/academic`}>
           <motion.div
             className="absolute bottom-[55%] left-[22%] w-[22%] h-[18%] cursor-pointer"
             whileHover={{ scale: 1.02 }}
@@ -129,7 +131,7 @@ export default function HeroSection() {
           />
         </Link>
 
-        <Link href="/life">
+        <Link href={`${BASE_PATH}/life`}>
           <motion.div
             className="absolute bottom-[55%] right-[22%] w-[22%] h-[18%] cursor-pointer"
             whileHover={{ scale: 1.02 }}

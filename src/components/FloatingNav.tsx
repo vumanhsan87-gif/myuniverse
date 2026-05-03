@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 
+const BASE_PATH = '/myuniverse';
+
 const navPoints = [
   { id: 'home', href: '/', label: '主页' },
   { id: 'academic', href: '/academic', label: '保研与大学' },
@@ -23,7 +25,7 @@ export default function FloatingNav() {
         {navPoints.map((point) => {
           const isActive = pathname === point.href;
           return (
-            <Link key={point.id} href={point.href}>
+            <Link key={point.id} href={`${BASE_PATH}${point.href}`}>
               <motion.div
                 className="relative flex items-center justify-end"
                 whileHover={{ x: -5 }}
@@ -39,10 +41,10 @@ export default function FloatingNav() {
                     className={`w-3 h-3 rounded-full border-2 ${
                       isActive
                         ? point.href === '/life'
-                          ? 'bg-life-primary border-life-primary scale-125' // 保命：绿色
+                          ? 'bg-life-primary border-life-primary scale-125'
                           : point.href === '/academic'
-                            ? 'bg-academic-primary border-academic-primary scale-125' // 保研：橙色
-                            : 'bg-ice-blue border-ice-blue scale-125' // 主页：冰蓝色
+                            ? 'bg-academic-primary border-academic-primary scale-125'
+                            : 'bg-ice-blue border-ice-blue scale-125'
                         : point.href === '/life'
                           ? 'border-text-muted hover:border-life-primary'
                           : point.href === '/academic'

@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
+const BASE_PATH = '/myuniverse';
+
 const sections = [
   {
     href: '/academic',
@@ -43,7 +45,7 @@ export default function DirectoryNav() {
             viewport={{ once: true }}
             transition={{ delay: index * 0.2 }}
           >
-            <Link href={section.href}>
+            <Link href={`${BASE_PATH}${section.href}`}>
               <div
                 className={`relative p-8 cursor-pointer transition-all duration-300 hover:scale-105 glass-card ${
                   section.color === 'academic'
@@ -51,7 +53,7 @@ export default function DirectoryNav() {
                     : 'hover:glow-green'
                 }`}
               >
-                {/* 标题区域 - 不再有大星星 */}
+                {/* 标题区域 */}
                 <div className="mb-6">
                   <h3 className="text-xl font-bold text-text-primary">
                     {section.title}

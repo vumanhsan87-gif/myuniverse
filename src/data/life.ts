@@ -3,11 +3,14 @@
  * 直接在这里添加或修改内容即可
  */
 
+const BASE_PATH = '/myuniverse';
+
 // ============ 图片和链接的添加方法 ============
 //
 // 【图片】
 // 1. 把图片放到 public/images/life/ 文件夹下（运动图片放 health/，书籍封面放 books/）
 // 2. 在数据中添加 images 字段，格式：['/images/life/图片文件名.png']
+//    （系统会自动添加 BASE_PATH 前缀）
 //
 // 【链接（视频/飞书文档等）】
 // 1. 添加 links 字段，格式：
@@ -106,6 +109,11 @@ export interface Idea {
   id: string;
   content: string;
   detail?: string;
+}
+
+// 图片路径工具函数
+export function getImagePath(path: string): string {
+  return `${BASE_PATH}${path}`;
 }
 
 // 页面分区配置
