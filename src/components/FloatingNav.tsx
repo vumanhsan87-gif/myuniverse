@@ -38,27 +38,27 @@ export default function FloatingNav() {
                   <motion.div
                     className={`w-3 h-3 rounded-full border-2 ${
                       isActive
-                        ? point.href === '/life'
+                        ? point.id === 'life'
                           ? 'bg-life-primary border-life-primary scale-125'
-                          : point.href === '/academic'
+                          : point.id === 'academic'
                             ? 'bg-academic-primary border-academic-primary scale-125'
                             : 'bg-ice-blue border-ice-blue scale-125'
-                        : point.href === '/life'
+                        : point.id === 'life'
                           ? 'border-text-muted hover:border-life-primary'
-                          : point.href === '/academic'
+                          : point.id === 'academic'
                             ? 'border-text-muted hover:border-academic-primary'
                             : 'border-text-muted hover:border-ice-blue'
                     }`}
                     animate={
                       isActive
                         ? {
-                            boxShadow: point.href === '/life'
+                            boxShadow: point.id === 'life'
                               ? [
                                   '0 0 10px rgba(5, 150, 105, 0.5)',
                                   '0 0 20px rgba(5, 150, 105, 0.8)',
                                   '0 0 10px rgba(5, 150, 105, 0.5)',
                                 ]
-                              : point.href === '/academic'
+                              : point.id === 'academic'
                                 ? [
                                     '0 0 10px rgba(249, 115, 22, 0.5)',
                                     '0 0 20px rgba(249, 115, 22, 0.8)',
