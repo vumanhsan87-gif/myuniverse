@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+/* 宇宙色系变量 */
+:root {
+  /* 宇宙深空底色 */
+  --color-universe-bg: #0B0F19;
+  --color-universe-deep: #050810;
+  --color-universe-blue: #0a1628;
+
+  /* 星星颜色 */
+  --color-star-white: #ffffff;
+  --color-star-blue: #a8c7fa;
+  --color-star-glow: rgba(168, 199, 250, 0.6);
+
+  /* 唯一强调色：冰蓝色 (Ice Blue) */
+  --color-ice-blue: #00d4ff;
+  --color-ice-blue-secondary: #7dd3fc;
+  --color-ice-blue-glow: rgba(0, 212, 255, 0.4);
+  --color-ice-blue-subtle: rgba(0, 212, 255, 0.1);
+
+  /* 第一星系（保研与大学）- 科技橙 + 冷白光 */
+  --color-academic-primary: #f97316;
+  --color-academic-secondary: #fbbf24;
+  --color-academic-light: #fef3c7;
+  --color-academic-glow: rgba(249, 115, 22, 0.4);
+
+  /* 第二星系（保命与生活）- 墨绿 + 暖金色 */
+  --color-life-primary: #059669;
+  --color-life-secondary: #fbbf24;
+  --color-life-light: #fef3c7;
+  --color-life-glow: rgba(5, 150, 105, 0.4);
+
+  /* 毛玻璃效果 */
+  --color-glass-bg: rgba(11, 15, 25, 0.7);
+  --color-glass-border: rgba(168, 199, 250, 0.15);
+
+  /* 文字颜色 */
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+}
+
+@theme inline {
+  /* 宇宙背景 */
+  --color-universe-bg: var(--color-universe-bg);
+  --color-universe-deep: var(--color-universe-deep);
+  --color-universe-blue: var(--color-universe-blue);
+
+  /* 星星 */
+  --color-star-white: var(--color-star-white);
+  --color-star-blue: var(--color-star-blue);
+
+  /* 唯一强调色：冰蓝色 */
+  --color-ice-blue: var(--color-ice-blue);
+  --color-ice-blue-secondary: var(--color-ice-blue-secondary);
+
+  /* 第一星系 */
+  --color-academic-primary: var(--color-academic-primary);
+  --color-academic-secondary: var(--color-academic-secondary);
+
+  /* 第二星系 */
+  --color-life-primary: var(--color-life-primary);
+  --color-life-secondary: var(--color-life-secondary);
+
+  /* 毛玻璃 */
+  --color-glass-bg: var(--color-glass-bg);
+  --color-glass-border: var(--color-glass-border);
+
+  /* 文字 */
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+}
+
+/* 全局样式 */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-universe-bg);
+  color: var(--color-text-primary);
+  font-family: 'Noto Serif SC', 'STSong', 'SimSun', serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* 毛玻璃卡片基础样式 */
+.glass-card {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: 16px;
+}
+
+/* 发光效果 */
+.glow-ice-blue {
+  box-shadow: 0 0 20px var(--color-ice-blue-glow), 0 0 40px rgba(0, 212, 255, 0.2);
+}
+
+.glow-orange {
+  box-shadow: 0 0 20px var(--color-academic-glow), 0 0 40px rgba(249, 115, 22, 0.2);
+}
+
+.glow-green {
+  box-shadow: 0 0 20px var(--color-life-glow), 0 0 40px rgba(5, 150, 105, 0.2);
+}
+
+/* 冰蓝色发光小圆点 - Tag样式 */
+.tag-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.tag-dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--color-ice-blue);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--color-ice-blue-glow);
+}
+
+/* 镂空星星样式 */
+.hollow-star {
+  width: 16px;
+  height: 16px;
+  position: relative;
+}
+
+.hollow-star::before {
+  content: '★';
+  font-size: 14px;
+  color: var(--color-academic-primary);
+  opacity: 0.8;
+}
+
+/* 星星闪烁动画 */
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+/* 字体平滑滚动 */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* 隐藏滚动条但保持功能 */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 响应式字体大小 */
+.text-hero {
+  font-size: clamp(2rem, 8vw, 6rem);
+  line-height: 1.2;
+}
+
+.text-motto {
+  font-size: clamp(1rem, 4vw, 3rem);
+  letter-spacing: 0.3em;
+}
