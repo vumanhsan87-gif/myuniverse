@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: 'export',
   basePath: '/myuniverse',
+  trailingSlash: true,
   images: {
     unoptimized: true,
     remotePatterns: [
