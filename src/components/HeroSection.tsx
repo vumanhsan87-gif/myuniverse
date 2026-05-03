@@ -60,6 +60,7 @@ function DetailModal({
 }
 
 export default function HeroSection() {
+  const basePath = process.env.NODE_ENV === 'production' ? '/myuniverse' : '';
   const [currentIdeaIndex, setCurrentIdeaIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
@@ -112,7 +113,7 @@ export default function HeroSection() {
       >
         <div className="relative w-full" style={{ height: '60vh' }}>
           <img
-            src="/images/hero/home-hero.png"
+            src={`${basePath}/images/hero/home-hero.png`}
             alt="刘宇微 - 致广大而尽精微"
             className="w-full h-full object-contain object-center"
           />
