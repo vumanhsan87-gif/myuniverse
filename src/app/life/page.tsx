@@ -3,7 +3,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useState } from 'react';
-import { lifeSections, books, exercises, ideas, type Link, getImagePath } from '@/data/life';
+import { lifeSections, books, exerciseLogs, ideas, type Link, getImagePath } from '@/data/life';
+import ExerciseCalendar from '@/components/ExerciseCalendar';
+import { exercises, type ExerciseLog } from '@/data/life';
 
 // 获取链接图标
 function LinkIcon({ type }: { type?: string }) {
@@ -147,6 +149,7 @@ export default function LifePage() {
     images?: string[];
     links?: Link[];
   } | null>(null);
+  const [selectedLog, setSelectedLog] = useState<ExerciseLog | null>(null);
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-6">
@@ -233,67 +236,24 @@ export default function LifePage() {
               </motion.div>
             ))}
 
-          {/* 运动 */}
-          {(activeSection === 'all' || activeSection === 'health') &&
-            exercises.map((item, index) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                onClick={() => setSelectedItem({
-                  title: item.name,
-                  content: item.detail,
-                  images: item.images,
-                  links: item.links,
-                })}
-                className="glass-card p-6 hover:glow-green transition-all duration-300 cursor-pointer group"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">💪</span>
-                    <h3 className="text-lg font-bold text-text-primary group-hover:text-life-primary transition-colors">
-                      {item.name}
-                    </h3>
-                  </div>
-                  <span className="text-text-muted text-sm">{item.unit}</span>
-                </div>
-                {/* 环形进度条 */}
-                <div className="relative w-24 h-24 mx-auto">
-                  <svg className="w-full h-full transform -rotate-90">
-                    <circle
-                      cx="48"
-                      cy="48"
-                      r="40"
-                      stroke="currentColor"
-                      strokeWidth="8"
-                      fill="none"
-                      className="text-text-muted/20"
-                    />
-                    <circle
-                      cx="48"
-                      cy="48"
-                      r="40"
-                      stroke="currentColor"
-                      strokeWidth="8"
-                      fill="none"
-                      strokeDasharray={`${2 * Math.PI * 40}`}
-                      strokeDashoffset={`${2 * Math.PI * 40 * (1 - item.current / item.target)}`}
-                      className="text-life-primary transition-all duration-500"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-text-primary font-bold">
-                      {Math.round((item.current / item.target) * 100)}%
-                    </span>
-                  </div>
-                </div>
-                <p className="text-center text-text-muted text-sm mt-2">
-                  {item.current} / {item.target}
-                </p>
-              </motion.div>
-            ))}
+          {/* 运动 - 使用日历展示 */}
+          {(activeSection === 'all' || activeSection === 'health') && (
+            <ExerciseCalendar
+              logs={exerciseLogs}
+              onLogClick={(log) => {
+                const exercise = exercises.find(e => e.id === log.exerciseId);
+                if (exercise) {
+                  setSelectedLog(log);
+                  setSelectedItem({
+                    title: exercise.name,
+                    content: exercise.detail,
+                    images: exercise.images,
+                    links: exercise.links,
+                  });
+                }
+              }}
+            />
+          )}
 
           {/* 奇思妙想 */}
           {(activeSection === 'all' || activeSection === 'ideas') &&
@@ -320,7 +280,7 @@ export default function LifePage() {
         </div>
 
         {/* 空状态 */}
-        {books.length === 0 && exercises.length === 0 && ideas.length === 0 && (
+        {books.length === 0 && ideas.length === 0 && (
           <div className="text-center py-20">
             <p className="text-text-muted">暂无相关内容</p>
           </div>

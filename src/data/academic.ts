@@ -73,8 +73,18 @@ export interface AcademicItem {
   tags: string[];
   detail?: string;           // 详情弹窗中显示的详细内容（支持 \n 换行）
   images?: string[];        // 详情弹窗中显示的图片路径
-  links?: Link[];          // 详情弹窗中显示的链接（视频、飞书文档等）
+  links?: Link[];           // 详情弹窗中显示的链接（视频、飞书文档等）
+  position?: string;         // 星轨图位置，格式 "类别+顺序"，如 "视觉1"、"理工2.1"
+  meaning?: string;          // 星轨图 hover 时显示的提示文字
 }
+
+// 星轨图类别颜色配置
+export const starMapCategories: Record<string, { color: string; glow: string }> = {
+  '视觉': { color: '#f0abfc', glow: 'rgba(240, 171, 252, 0.4)' },      // 粉紫色
+  '学术': { color: '#67e8f9', glow: 'rgba(103, 232, 249, 0.4)' },       // 青色
+  '理工': { color: '#fde68a', glow: 'rgba(253, 230, 138, 0.4)' },       // 暖金色
+  '实习研究': { color: '#86efac', glow: 'rgba(134, 239, 172, 0.4)' },  // 浅绿色
+};
 
 export interface Link {
   title: string;
@@ -102,39 +112,66 @@ export const tags = [
 
 // 在这里添加你的经历内容
 export const academicItems: AcademicItem[] = [
-  // ========== 技术类 ==========
+  // ========== 理工类 ==========
   {
     id: 'tech-1',
-    title: '333在这里添加标题',
-    description: '3333在这里添加简短的预览描述...',
-    detail: '3333333333333在这里添加详细的经历描述，包括：\n- 具体做了什么\n- 使用了什么技术\n- 有什么成果',
-    date: '2024',
+    title: '数据分析项目',
+    description: '使用Python进行数据分析和可视化，探索数据背后的规律',
+    detail: '这是一个数据分析项目，主要使用Python进行数据处理和可视化分析。\n\n项目中我：\n- 爬取了多个数据源\n- 使用pandas进行数据清洗\n- 用matplotlib和seaborn制作可视化图表\n- 撰写了分析报告',
+    date: '2025',
     tags: ['tech', 'ai'],
-    links: [
-     {
-       title: '飞书项目文档',
-       url: 'https://rcnmp728rcry.feishu.cn/wiki/L5gbwvdxEiKI1vkiJPccFOQanSg',
-       type: 'feishu',
-       description: '详细记录'
-     }
-   ]
+    position: '理工1',
+    meaning: '用代码探索数据背后的规律',
+  },
+  {
+    id: 'tech-2',
+    title: '计算机视觉研究',
+    description: '深度学习在图像识别中的应用',
+    date: '2025',
+    tags: ['tech', 'ai'],
+    position: '理工2.1',
+    meaning: '让机器学会"看"这个世界',
+  },
+  {
+    id: 'tech-3',
+    title: '自动化工具开发',
+    description: '提升效率的脚本与工具开发',
+    date: '2025',
+    tags: ['tech'],
+    position: '理工2.2',
+    meaning: '用自动化解放双手',
   },
 
-  // ========== 经管类 ==========
+  // ========== 学术类 ==========
   {
     id: 'finance-1',
     title: '财务报表分析',
     description: '对上市公司财务报表进行深度分析，撰写分析报告',
     date: '2024',
     tags: ['accounting', 'finance'],
+    position: '学术1',
+    meaning: '读懂数字背后的商业逻辑',
   },
 
-  // ========== 实习 ==========
+  // ========== 实习研究类 ==========
   {
     id: 'internship-1',
     title: 'PE/VC 实习经历',
     description: '参与投后增值服务，进行行业研究和公司分析',
     date: '2024',
     tags: ['internship', 'finance'],
+    position: '实习研究1',
+    meaning: '从资本视角理解企业价值',
+  },
+
+  // ========== 视觉类 ==========
+  {
+    id: 'vis-1',
+    title: '可视化大屏设计',
+    description: '数据可视化与交互设计',
+    date: '2025',
+    tags: ['visualization'],
+    position: '视觉1',
+    meaning: '让数据讲述故事',
   },
 ];

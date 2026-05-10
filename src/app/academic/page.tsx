@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useState } from 'react';
 import { academicItems, tags, type AcademicItem, type Link, getImagePath } from '@/data/academic';
+import StarMap from '@/components/StarMap';
 
 // 获取链接图标
 function LinkIcon({ type }: { type?: string }) {
@@ -158,13 +159,7 @@ function DetailModal({
 }
 
 export default function AcademicPage() {
-  const [activeTag, setActiveTag] = useState('all');
   const [selectedItem, setSelectedItem] = useState<AcademicItem | null>(null);
-
-  const filteredContent: AcademicItem[] =
-    activeTag === 'all'
-      ? academicItems
-      : academicItems.filter((item) => item.tags.includes(activeTag));
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-6">
@@ -183,31 +178,18 @@ export default function AcademicPage() {
           </p>
         </motion.div>
 
-        {/* Tag 筛选 - 顶部导航形式 */}
+        {/* 星轨图 */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-3 mb-12"
         >
-          {tags.map((tag) => (
-            <button
-              key={tag.id}
-              onClick={() => setActiveTag(tag.id)}
-              className={`px-4 py-2 rounded-full text-sm transition-all duration-300 ${
-                activeTag === tag.id
-                  ? 'bg-academic-primary text-white glow-orange'
-                  : 'glass-card text-text-secondary hover:text-text-primary hover:border-academic-primary/50'
-              }`}
-            >
-              {tag.label}
-            </button>
-          ))}
+          <StarMap onNodeClick={setSelectedItem} />
         </motion.div>
 
         {/* 内容卡片 */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredContent.map((item, index) => (
+          {academicItems.map((item, index) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 20 }}
@@ -246,7 +228,7 @@ export default function AcademicPage() {
         </div>
 
         {/* 空状态 */}
-        {filteredContent.length === 0 && (
+        {academicItems.length === 0 && (
           <div className="text-center py-20">
             <p className="text-text-muted">暂无相关内容</p>
           </div>

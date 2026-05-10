@@ -111,7 +111,15 @@ export interface Idea {
   detail?: string;
 }
 
-// 图片路径工具函数
+// 运动日志（用于日历打卡）
+export interface ExerciseLog {
+  id: string;
+  date: string;       // '2026-05-01'
+  exerciseId: string; // 对应 exercises 中的运动类型
+  content: string;     // 简短记录，如 "跑步3公里"
+  hasDetail?: boolean; // 是否有详情可以点击查看
+}
+
 export function getImagePath(path: string): string {
   return `${BASE_PATH}${path}`;
 }
@@ -159,6 +167,15 @@ export const exercises: Exercise[] = [
       }
     ]
   },
+];
+
+// 运动日志（用于日历展示）
+export const exerciseLogs: ExerciseLog[] = [
+  // 5月的运动记录
+  { id: 'log-1', date: '2026-05-02', exerciseId: 'exercise-1', content: '有氧操30分钟', hasDetail: true },
+  { id: 'log-2', date: '2026-05-04', exerciseId: 'exercise-1', content: '有氧操' },
+  { id: 'log-3', date: '2026-05-07', exerciseId: 'exercise-1', content: '有氧燃脂' },
+  { id: 'log-4', date: '2026-05-09', exerciseId: 'exercise-1', content: '今天状态不错', hasDetail: true },
 ];
 
 // 奇思妙想

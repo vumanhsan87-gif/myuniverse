@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: '刘宇微 | 致广大而尽精微',
   description: '个人介绍网站',
   keywords: ['刘宇微', '个人介绍'],
+  colorScheme: 'dark',
 };
 
 export default function RootLayout({
