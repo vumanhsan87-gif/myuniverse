@@ -187,8 +187,8 @@ export default function AcademicPage() {
           <StarMap onNodeClick={setSelectedItem} />
         </motion.div>
 
-        {/* 内容卡片 */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+        {/* 内容卡片 - 瀑布流布局 */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
           {academicItems.map((item, index) => (
             <motion.div
               key={item.id}
@@ -196,7 +196,7 @@ export default function AcademicPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               onClick={() => setSelectedItem(item)}
-              className="glass-card p-6 hover:glow-orange transition-all duration-300 cursor-pointer group"
+              className="glass-card p-6 hover:glow-orange transition-all duration-300 cursor-pointer group mb-4 break-inside-avoid"
             >
               <div className="flex items-start justify-between mb-4">
                 <span className="text-xs text-text-muted">{item.date}</span>

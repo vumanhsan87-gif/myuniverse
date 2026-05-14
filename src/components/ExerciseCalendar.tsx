@@ -75,30 +75,27 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
   const weekdayLabels = ['日', '一', '二', '三', '四', '五', '六'];
 
   return (
-    <div className="w-full mb-8">
+    <div className="w-full">
       {/* 标题和月份导航 */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <span className="text-life-primary text-sm">运动打卡日历</span>
-          <span className="text-text-muted text-xs">点击有内容的日期查看详情</span>
-        </div>
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-life-primary text-sm">运动打卡日历</span>
+        <div className="flex items-center gap-1">
           <button
             onClick={goToPrevMonth}
-            className="p-2 glass-card hover:border-life-primary/50 transition-colors"
+            className="p-1 glass-card hover:border-life-primary/50 transition-colors"
           >
-            <svg className="w-4 h-4 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3 h-3 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <span className="text-text-primary font-medium min-w-[80px] text-center">
-            {year}年{month}月
+          <span className="text-text-primary font-medium text-xs min-w-[60px] text-center">
+            {year}.{month}
           </span>
           <button
             onClick={goToNextMonth}
-            className="p-2 glass-card hover:border-life-primary/50 transition-colors"
+            className="p-1 glass-card hover:border-life-primary/50 transition-colors"
           >
-            <svg className="w-4 h-4 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3 h-3 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
@@ -106,13 +103,13 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
       </div>
 
       {/* 日历网格 */}
-      <div className="glass-card p-4">
+      <div className="glass-card p-2">
         {/* 星期标题 */}
-        <div className="grid grid-cols-7 gap-1 mb-2">
+        <div className="grid grid-cols-7 gap-1 mb-1">
           {weekdayLabels.map((label, i) => (
             <div
               key={label}
-              className={`text-center text-sm py-2 ${
+              className={`text-center text-xs py-1 ${
                 i === 0 || i === 6 ? 'text-life-primary' : 'text-text-muted'
               }`}
             >
@@ -139,44 +136,32 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.01 }}
                 className={`
-                  aspect-square rounded-lg flex flex-col items-center justify-center p-1
+                  aspect-square rounded flex flex-col items-center justify-center
                   transition-all duration-200
                   ${log ? 'cursor-pointer' : ''}
                   ${log?.hasDetail ? 'bg-life-primary/10 border border-life-primary/30' : ''}
-                  ${isToday ? 'ring-2 ring-life-primary ring-offset-2 ring-offset-transparent' : ''}
+                  ${isToday ? 'ring-1 ring-life-primary' : ''}
                   ${log ? 'hover:bg-life-primary/20' : ''}
                 `}
                 onClick={() => log && handleDayClick(day)}
               >
-                <span className={`text-sm font-medium ${
+                <span className={`text-xs font-medium ${
                   log ? (log.hasDetail ? 'text-life-primary' : 'text-text-primary') : 'text-text-muted'
                 }`}>
                   {day}
                 </span>
                 {log && (
-                  <span className={`text-xs mt-0.5 truncate max-w-full ${
+                  <span className={`text-xs truncate max-w-full ${
                     log.hasDetail
                       ? 'text-life-primary animate-pulse'
                       : 'text-text-secondary'
                   }`}>
-                    {log.content.length > 6 ? log.content.slice(0, 5) + '…' : log.content}
+                    {log.content.length > 4 ? log.content.slice(0, 3) + '…' : log.content}
                   </span>
                 )}
               </motion.div>
             );
           })}
-        </div>
-      </div>
-
-      {/* 图例 */}
-      <div className="flex items-center gap-4 mt-3 justify-center">
-        <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded bg-life-primary/20 border border-life-primary/30"></span>
-          <span className="text-xs text-text-muted">有详情可点击</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded ring-2 ring-life-primary"></span>
-          <span className="text-xs text-text-muted">今天</span>
         </div>
       </div>
     </div>

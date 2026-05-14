@@ -218,7 +218,7 @@ export default function LifePage() {
             {/* 左右布局 */}
             <div className="flex gap-6">
               {/* 左边：日历 */}
-              <div className="flex-1 min-w-[400px]">
+              <div className="w-[300px] flex-shrink-0">
                 <ExerciseCalendar
                   logs={exerciseLogs}
                   onLogClick={(log) => {
@@ -236,34 +236,43 @@ export default function LifePage() {
                 />
               </div>
 
-              {/* 右边：运动链接卡片 */}
-              <div className="w-[280px] flex-shrink-0">
-                <div className="glass-card p-4 h-[320px] overflow-y-auto">
+              {/* 右边：运动链接卡片（高度跟日历一样） */}
+              <div className="flex-1">
+                <div className="glass-card p-4 h-[280px] overflow-y-auto">
                   <h3 className="text-sm text-text-muted mb-3">运动链接</h3>
                   <div className="space-y-3">
                     {exercises
                       .sort((a, b) => (b.checkCount || 0) - (a.checkCount || 0))
                       .map((exercise) => (
-                        <div
-                          key={exercise.id}
-                          onClick={() => setSelectedItem({
-                            title: exercise.name,
-                            content: exercise.detail,
-                            images: exercise.images,
-                            links: exercise.links,
-                          })}
-                          className="glass-card p-3 hover:border-life-primary/50 transition-colors cursor-pointer group"
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className="text-life-primary font-bold text-sm w-6">
+                        <div key={exercise.id} className="glass-card p-3 hover:border-life-primary/50 transition-colors">
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="text-life-primary font-bold text-sm w-8">
                               {exercise.checkCount || 0}次
                             </span>
-                            <div className="flex-1">
-                              <p className="text-text-primary group-hover:text-life-primary transition-colors text-sm">
-                                {exercise.name}
-                              </p>
-                            </div>
+                            <p className="text-text-primary text-sm font-medium">
+                              {exercise.name}
+                            </p>
                           </div>
+                          {exercise.detail && (
+                            <p className="text-text-secondary text-xs leading-relaxed ml-11">
+                              {exercise.detail}
+                            </p>
+                          )}
+                          {exercise.links && exercise.links.length > 0 && (
+                            <div className="ml-11 mt-2">
+                              {exercise.links.map((link, i) => (
+                                <a
+                                  key={i}
+                                  href={link.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-life-primary text-xs hover:underline block"
+                                >
+                                  {link.title}
+                                </a>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ))}
                   </div>
@@ -273,8 +282,8 @@ export default function LifePage() {
           </motion.div>
         )}
 
-        {/* 内容卡片 */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+        {/* 内容卡片 - 瀑布流布局 */}
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
           {/* 书籍 */}
           {(activeSection === 'all' || activeSection === 'books') &&
             books.map((item, index) => (
@@ -289,7 +298,7 @@ export default function LifePage() {
                   images: item.images,
                   links: item.links,
                 })}
-                className="glass-card p-6 hover:glow-green transition-all duration-300 cursor-pointer group"
+                className="glass-card p-6 hover:glow-green transition-all duration-300 cursor-pointer group mb-4 break-inside-avoid"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-2xl">📚</span>
@@ -320,7 +329,7 @@ export default function LifePage() {
                   title: item.content.length > 20 ? item.content.slice(0, 20) + '...' : item.content,
                   content: item.detail || item.content,
                 })}
-                className="glass-card p-6 hover:glow-green transition-all duration-300 cursor-pointer group"
+                className="glass-card p-6 hover:glow-green transition-all duration-300 cursor-pointer group mb-4 break-inside-avoid"
               >
                 <div className="flex items-start gap-3">
                   <span className="text-2xl">✨</span>
