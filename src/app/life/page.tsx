@@ -168,39 +168,6 @@ export default function LifePage() {
           </p>
         </motion.div>
 
-        {/* 分区筛选 - 顶部导航形式 */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-3 mb-12"
-        >
-          <button
-            onClick={() => setActiveSection('all')}
-            className={`px-4 py-2 rounded-full text-sm transition-all duration-300 ${
-              activeSection === 'all'
-                ? 'bg-life-primary text-white glow-green'
-                : 'glass-card text-text-secondary hover:text-text-primary hover:border-life-primary/50'
-            }`}
-          >
-            全部
-          </button>
-          {lifeSections.map((section) => (
-            <button
-              key={section.id}
-              onClick={() => setActiveSection(section.id)}
-              className={`px-4 py-2 rounded-full text-sm transition-all duration-300 flex items-center gap-2 ${
-                activeSection === section.id
-                  ? 'bg-life-primary text-white glow-green'
-                  : 'glass-card text-text-secondary hover:text-text-primary hover:border-life-primary/50'
-              }`}
-            >
-              <span>{section.icon}</span>
-              <span>{section.title}</span>
-            </button>
-          ))}
-        </motion.div>
-
         {/* 运动 - 左日历右链接布局 */}
         {(activeSection === 'all' || activeSection === 'health') && (
           <motion.div
@@ -208,15 +175,8 @@ export default function LifePage() {
             animate={{ opacity: 1, y: 0 }}
             className="w-full mb-8"
           >
-            {/* 标题 */}
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-2xl">💪</span>
-              <h2 className="text-xl font-bold text-text-primary">身体是革命的本钱</h2>
-              <span className="text-text-muted text-sm">饮食与运动的平衡艺术</span>
-            </div>
-
-            {/* 左右布局 */}
-            <div className="flex gap-6">
+            {/* 左右布局 - flex stretch 让高度自动对齐 */}
+            <div className="flex gap-6 items-stretch">
               {/* 左边：日历 */}
               <div className="w-[300px] flex-shrink-0">
                 <ExerciseCalendar
@@ -236,9 +196,9 @@ export default function LifePage() {
                 />
               </div>
 
-              {/* 右边：运动链接卡片（高度跟日历一样） */}
+              {/* 右边：运动链接卡片（高度自动跟日历一样） */}
               <div className="flex-1">
-                <div className="glass-card p-4 h-[280px] overflow-y-auto">
+                <div className="glass-card p-4 h-full overflow-y-auto">
                   <h3 className="text-sm text-text-muted mb-3">运动链接</h3>
                   <div className="space-y-3">
                     {exercises
@@ -282,6 +242,38 @@ export default function LifePage() {
           </motion.div>
         )}
 
+        {/* 分区筛选 - 移动到日历下方 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="flex flex-wrap justify-center gap-3 mb-8"
+        >
+          <button
+            onClick={() => setActiveSection('all')}
+            className={`px-4 py-2 rounded-full text-sm transition-all duration-300 ${
+              activeSection === 'all'
+                ? 'bg-life-primary text-white glow-green'
+                : 'glass-card text-text-secondary hover:text-text-primary hover:border-life-primary/50'
+            }`}
+          >
+            全部
+          </button>
+          {lifeSections.filter(s => s.id !== 'health').map((section) => (
+            <button
+              key={section.id}
+              onClick={() => setActiveSection(section.id)}
+              className={`px-4 py-2 rounded-full text-sm transition-all duration-300 ${
+                activeSection === section.id
+                  ? 'bg-life-primary text-white glow-green'
+                  : 'glass-card text-text-secondary hover:text-text-primary hover:border-life-primary/50'
+              }`}
+            >
+              {section.title}
+            </button>
+          ))}
+        </motion.div>
+
         {/* 内容卡片 - 瀑布流布局 */}
         <div className="columns-1 md:columns-2 lg:columns-3 gap-4">
           {/* 书籍 */}
@@ -300,14 +292,11 @@ export default function LifePage() {
                 })}
                 className="glass-card p-6 hover:glow-green transition-all duration-300 cursor-pointer group mb-4 break-inside-avoid"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-2xl">📚</span>
-                  <div>
-                    <h3 className="text-lg font-bold text-text-primary group-hover:text-life-primary transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-text-muted text-sm">{item.author}</p>
-                  </div>
+                <div className="mb-4">
+                  <h3 className="text-lg font-bold text-text-primary group-hover:text-life-primary transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-text-muted text-sm">{item.author}</p>
                 </div>
                 {item.notes && (
                   <p className="text-text-secondary text-sm leading-relaxed">
@@ -331,12 +320,9 @@ export default function LifePage() {
                 })}
                 className="glass-card p-6 hover:glow-green transition-all duration-300 cursor-pointer group mb-4 break-inside-avoid"
               >
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">✨</span>
-                  <p className="text-text-primary leading-relaxed group-hover:text-life-primary transition-colors">
-                    {item.content}
-                  </p>
-                </div>
+                <p className="text-text-primary leading-relaxed group-hover:text-life-primary transition-colors">
+                  {item.content}
+                </p>
               </motion.div>
             ))}
         </div>
