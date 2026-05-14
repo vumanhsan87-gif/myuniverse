@@ -3,7 +3,7 @@
  * 直接在这里添加或修改内容即可
  */
 
-const BASE_PATH = '/myuniverse';
+const BASE_PATH = ''; // 使用自定义域名时为空
 
 // ============ 图片和链接的添加方法 ============
 //
@@ -102,6 +102,7 @@ export interface Exercise {
   detail?: string;
   images?: string[];
   links?: Link[];
+  checkCount?: number; // 打卡次数
 }
 
 // 奇思妙想
@@ -158,6 +159,7 @@ export const exercises: Exercise[] = [
     current: 3,
     unit: '次/周',
     detail: '26.5.1，感觉良好，稍稍出汗',
+    checkCount: 4, // 打卡次数
     links: [
       {
         title: '30分钟全程站立有氧燃脂操',

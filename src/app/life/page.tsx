@@ -201,8 +201,80 @@ export default function LifePage() {
           ))}
         </motion.div>
 
+        {/* 运动 - 左日历右链接布局 */}
+        {(activeSection === 'all' || activeSection === 'health') && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="w-full mb-8"
+          >
+            {/* 标题 */}
+            <div className="flex items-center gap-3 mb-4">
+              <span className="text-2xl">💪</span>
+              <h2 className="text-xl font-bold text-text-primary">身体是革命的本钱</h2>
+              <span className="text-text-muted text-sm">饮食与运动的平衡艺术</span>
+            </div>
+
+            {/* 左右布局 */}
+            <div className="flex gap-6">
+              {/* 左边：日历 */}
+              <div className="flex-1 min-w-[400px]">
+                <ExerciseCalendar
+                  logs={exerciseLogs}
+                  onLogClick={(log) => {
+                    const exercise = exercises.find(e => e.id === log.exerciseId);
+                    if (exercise) {
+                      setSelectedLog(log);
+                      setSelectedItem({
+                        title: exercise.name,
+                        content: exercise.detail,
+                        images: exercise.images,
+                        links: exercise.links,
+                      });
+                    }
+                  }}
+                />
+              </div>
+
+              {/* 右边：运动链接卡片 */}
+              <div className="w-[280px] flex-shrink-0">
+                <div className="glass-card p-4 h-[320px] overflow-y-auto">
+                  <h3 className="text-sm text-text-muted mb-3">运动链接</h3>
+                  <div className="space-y-3">
+                    {exercises
+                      .sort((a, b) => (b.checkCount || 0) - (a.checkCount || 0))
+                      .map((exercise) => (
+                        <div
+                          key={exercise.id}
+                          onClick={() => setSelectedItem({
+                            title: exercise.name,
+                            content: exercise.detail,
+                            images: exercise.images,
+                            links: exercise.links,
+                          })}
+                          className="glass-card p-3 hover:border-life-primary/50 transition-colors cursor-pointer group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className="text-life-primary font-bold text-sm w-6">
+                              {exercise.checkCount || 0}次
+                            </span>
+                            <div className="flex-1">
+                              <p className="text-text-primary group-hover:text-life-primary transition-colors text-sm">
+                                {exercise.name}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* 内容卡片 */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
           {/* 书籍 */}
           {(activeSection === 'all' || activeSection === 'books') &&
             books.map((item, index) => (
@@ -235,25 +307,6 @@ export default function LifePage() {
                 )}
               </motion.div>
             ))}
-
-          {/* 运动 - 使用日历展示 */}
-          {(activeSection === 'all' || activeSection === 'health') && (
-            <ExerciseCalendar
-              logs={exerciseLogs}
-              onLogClick={(log) => {
-                const exercise = exercises.find(e => e.id === log.exerciseId);
-                if (exercise) {
-                  setSelectedLog(log);
-                  setSelectedItem({
-                    title: exercise.name,
-                    content: exercise.detail,
-                    images: exercise.images,
-                    links: exercise.links,
-                  });
-                }
-              }}
-            />
-          )}
 
           {/* 奇思妙想 */}
           {(activeSection === 'all' || activeSection === 'ideas') &&

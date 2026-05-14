@@ -188,7 +188,7 @@ export default function AcademicPage() {
         </motion.div>
 
         {/* 内容卡片 */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
           {academicItems.map((item, index) => (
             <motion.div
               key={item.id}

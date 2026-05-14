@@ -60,7 +60,7 @@ function DetailModal({
 }
 
 export default function HeroSection() {
-  const basePath = process.env.NODE_ENV === 'production' ? '/myuniverse' : '';
+  const basePath = ''; // 使用自定义域名，不需要 basePath
   const [currentIdeaIndex, setCurrentIdeaIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [showDetail, setShowDetail] = useState(false);

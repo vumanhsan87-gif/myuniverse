@@ -1,106 +1,16 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { exercises, type Link, type ExerciseLog } from '@/data/life';
+import { motion } from 'framer-motion';
+import { type ExerciseLog } from '@/data/life';
 
 interface ExerciseCalendarProps {
   logs: ExerciseLog[];
   onLogClick: (log: ExerciseLog) => void;
 }
 
-// 链接图标组件
-function LinkIcon({ type }: { type?: string }) {
-  if (type === 'feishu') {
-    return <span className="text-life-primary text-lg">📄</span>;
-  }
-  if (type === 'bilibili') {
-    return <span className="text-life-primary text-lg">▶</span>;
-  }
-  return <span className="text-life-primary text-lg">🔗</span>;
-}
-
-// 详情弹窗
-function DetailModal({
-  log,
-  onClose,
-}: {
-  log: ExerciseLog;
-  onClose: () => void;
-}) {
-  const exercise = exercises.find(e => e.id === log.exerciseId);
-  if (!exercise) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="glass-card p-8 max-w-md w-full"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-text-primary mb-1">{exercise.name}</h2>
-            <p className="text-text-muted text-sm">{log.date}</p>
-          </div>
-          <button
-            onClick={onClose}
-            className="text-text-muted hover:text-text-primary transition-colors"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        {exercise.detail && (
-          <p className="text-text-secondary leading-relaxed whitespace-pre-wrap mb-6">
-            {exercise.detail}
-          </p>
-        )}
-
-        {exercise.links && exercise.links.length > 0 && (
-          <div>
-            <h3 className="text-sm text-text-muted mb-3">相关链接</h3>
-            <div className="space-y-3">
-              {exercise.links.map((link, i) => (
-                <a
-                  key={i}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 glass-card hover:border-life-primary/50 transition-colors group"
-                >
-                  <LinkIcon type={link.type} />
-                  <div>
-                    <p className="text-text-primary group-hover:text-life-primary transition-colors">
-                      {link.title}
-                    </p>
-                    {link.description && (
-                      <p className="text-text-muted text-xs mt-0.5">{link.description}</p>
-                    )}
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-      </motion.div>
-    </motion.div>
-  );
-}
-
 export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState('2026-05');
-  const [selectedLog, setSelectedLog] = useState<ExerciseLog | null>(null);
 
   // 解析当前月份
   const [year, month] = currentMonth.split('-').map(Number);
@@ -157,8 +67,7 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
   const handleDayClick = (day: number) => {
     const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const log = logMap[dateStr];
-    if (log) {
-      setSelectedLog(log);
+    if (log && log.hasDetail) {
       onLogClick(log);
     }
   };
@@ -270,16 +179,6 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
           <span className="text-xs text-text-muted">今天</span>
         </div>
       </div>
-
-      {/* 详情弹窗 */}
-      <AnimatePresence>
-        {selectedLog && (
-          <DetailModal
-            log={selectedLog}
-            onClose={() => setSelectedLog(null)}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 }
