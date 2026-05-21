@@ -112,12 +112,16 @@ export interface Idea {
   detail?: string;
 }
 
+// 运动状态颜色：rest=无色, light=绿色, intense=黄色, sick=银色
+export type ExerciseStatus = 'rest' | 'light' | 'intense' | 'sick';
+
 // 运动日志（用于日历打卡）
 export interface ExerciseLog {
   id: string;
   date: string;       // '2026-05-01'
   exerciseId: string; // 对应 exercises 中的运动类型
   content: string;     // 简短记录，如 "跑步3公里"
+  status?: ExerciseStatus; // 运动状态，用于日历颜色标记
   hasDetail?: boolean; // 是否有详情可以点击查看
 }
 
@@ -174,10 +178,11 @@ export const exercises: Exercise[] = [
 // 运动日志（用于日历展示）
 export const exerciseLogs: ExerciseLog[] = [
   // 5月的运动记录
-  { id: 'log-1', date: '2026-05-02', exerciseId: 'exercise-1', content: '有氧操30分钟', hasDetail: true },
-  { id: 'log-2', date: '2026-05-04', exerciseId: 'exercise-1', content: '有氧操' },
-  { id: 'log-3', date: '2026-05-07', exerciseId: 'exercise-1', content: '有氧燃脂' },
-  { id: 'log-4', date: '2026-05-09', exerciseId: 'exercise-1', content: '今天状态不错', hasDetail: true },
+  { id: 'log-1', date: '2026-05-02', exerciseId: 'exercise-1', content: '有氧操30分钟', status: 'intense', hasDetail: true },
+  { id: 'log-2', date: '2026-05-04', exerciseId: 'exercise-1', content: '有氧操', status: 'light' },
+  { id: 'log-3', date: '2026-05-07', exerciseId: 'exercise-1', content: '有氧燃脂', status: 'light' },
+  { id: 'log-4', date: '2026-05-09', exerciseId: 'exercise-1', content: '生病休息', status: 'sick', hasDetail: true },
+  { id: 'log-5', date: '2026-05-10', exerciseId: 'exercise-1', content: '休息日', status: 'rest' },
 ];
 
 // 奇思妙想

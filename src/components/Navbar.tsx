@@ -28,8 +28,8 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link href="/" className="text-lg font-medium text-text-primary hover:text-ice-blue transition-colors">
-          刘宇微
+        <Link href="/" className="text-base font-thin tracking-[0.3em] text-text-primary hover:text-ice-blue transition-colors uppercase">
+          WELCOME TO MY SUBTLE UNIVERSE
         </Link>
 
         <div className="flex gap-8">

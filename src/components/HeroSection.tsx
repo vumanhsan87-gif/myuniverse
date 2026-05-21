@@ -139,22 +139,21 @@ export default function HeroSection() {
         </Link>
       </div>
 
-      {/* 随机奇思妙想 - 带左右箭头 */}
+      {/* 随机奇思妙想 - 固定高度 + 底部渐隐 + blur过渡 */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="w-full max-w-4xl px-6 mt-24"
+        className="w-full max-w-4xl px-6 mt-4"
       >
-        {/* 标题和提示 - 左对齐，增加上方间距 */}
-        <div className="flex items-center gap-3 mb-6 ml-12">
+        {/* 标题 */}
+        <div className="flex items-center gap-3 mb-4 ml-12">
           <span className="text-ice-blue text-sm">随机奇思妙想</span>
           <span className="text-text-muted text-xs">自由轮播，点击查看详情</span>
         </div>
 
-        {/* 卡片区域 - 带左右箭头 */}
+        {/* 卡片区域 */}
         <div className="flex items-center gap-4">
-          {/* 左箭头 - 冰蓝色 */}
           <button
             onClick={handlePrev}
             className="text-ice-blue hover:text-ice-blue-secondary transition-colors flex-shrink-0"
@@ -164,9 +163,12 @@ export default function HeroSection() {
             </svg>
           </button>
 
-          {/* 卡片 - 弱化边框，悬浮时高亮 */}
           <div
-            className="flex-1 glass-card p-6 min-h-[60px] flex items-center justify-center cursor-pointer border border-[rgba(168,199,250,0.08)] hover:border-ice-blue/40 hover:glow-ice-blue transition-all duration-300"
+            className="flex-1 glass-card p-6 h-[120px] flex items-center justify-center cursor-pointer border border-[rgba(168,199,250,0.08)] hover:border-ice-blue/40 hover:glow-ice-blue transition-all duration-300 overflow-hidden"
+            style={{
+              maskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to bottom, black 50%, transparent 100%)',
+            }}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
             onClick={handleCardClick}
@@ -174,10 +176,10 @@ export default function HeroSection() {
             <AnimatePresence mode="wait">
               <motion.p
                 key={currentIdeaIndex}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
+                initial={{ opacity: 0, filter: 'blur(8px)' }}
+                animate={{ opacity: 1, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, filter: 'blur(8px)' }}
+                transition={{ duration: 0.6 }}
                 className="text-text-primary text-lg leading-relaxed text-center"
               >
                 {ideas[currentIdeaIndex]?.content}
@@ -185,7 +187,6 @@ export default function HeroSection() {
             </AnimatePresence>
           </div>
 
-          {/* 右箭头 - 冰蓝色 */}
           <button
             onClick={handleNext}
             className="text-ice-blue hover:text-ice-blue-secondary transition-colors flex-shrink-0"

@@ -2,7 +2,30 @@
 
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { type ExerciseLog } from '@/data/life';
+import { type ExerciseLog, type ExerciseStatus } from '@/data/life';
+
+const statusColors: Record<ExerciseStatus, { bg: string; star: string }> = {
+  rest:    { bg: '', star: '' },
+  light:   { bg: 'rgba(134, 239, 172, 0.15)', star: '#86efac' },
+  intense: { bg: 'rgba(253, 230, 138, 0.2)', star: '#fde68a' },
+  sick:    { bg: 'rgba(192, 192, 192, 0.12)', star: '#c0c0c0' },
+};
+
+function StarIcon({ color }: { color: string }) {
+  if (!color) return null;
+  return (
+    <svg
+      className="absolute -top-1 -right-1 w-3 h-3"
+      viewBox="0 0 20 20"
+      style={{ filter: `drop-shadow(0 0 3px ${color})` }}
+    >
+      <path
+        d="M10 0l2.5 7.5H20l-6 4.5 2.5 7.5L10 15l-6.5 4.5 2.5-7.5L0 7.5h7.5z"
+        fill={color}
+      />
+    </svg>
+  );
+}
 
 interface ExerciseCalendarProps {
   logs: ExerciseLog[];
@@ -128,6 +151,7 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
             const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const log = logMap[dateStr];
             const isToday = dateStr === '2026-05-10';
+            const colors = statusColors[log?.status || 'rest'];
 
             return (
               <motion.div
@@ -136,15 +160,19 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.01 }}
                 className={`
-                  aspect-square rounded flex flex-col items-center justify-center
+                  aspect-square rounded flex flex-col items-center justify-center relative
                   transition-all duration-200
                   ${log ? 'cursor-pointer' : ''}
-                  ${log?.hasDetail ? 'bg-life-primary/10 border border-life-primary/30' : ''}
+                  ${log?.hasDetail ? 'border border-life-primary/30' : ''}
                   ${isToday ? 'ring-1 ring-life-primary' : ''}
                   ${log ? 'hover:bg-life-primary/20' : ''}
                 `}
+                style={colors.bg ? { backgroundColor: colors.bg } : undefined}
                 onClick={() => log && handleDayClick(day)}
               >
+                {/* 发光星星 */}
+                {log && colors.star && <StarIcon color={colors.star} />}
+
                 <span className={`text-xs font-medium ${
                   log ? (log.hasDetail ? 'text-life-primary' : 'text-text-primary') : 'text-text-muted'
                 }`}>
