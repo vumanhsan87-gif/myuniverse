@@ -178,6 +178,16 @@ html.lenis {
   scrollbar-width: none;
 }
 
+/* 奇思妙想横向自动滚动 */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
 /* 响应式字体大小 */
 .text-hero {
   font-size: clamp(2rem, 8vw, 6rem);
