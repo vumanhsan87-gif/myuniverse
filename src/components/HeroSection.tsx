@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen w-full flex flex-col items-center justify-center">
+    <section className="relative h-[55vh] w-full flex flex-col items-center justify-center">
       {/* 主标题 - 渐显动效 */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -12,7 +12,7 @@ export default function HeroSection() {
         transition={{ duration: 1.2, ease: 'easeOut' }}
         className="text-center px-6"
       >
-        <h1 className="text-hero font-bold text-text-primary tracking-[0.15em]">
+        <h1 className="text-4xl md:text-6xl font-bold text-text-primary tracking-[0.15em]">
           致广大而尽精微
         </h1>
       </motion.div>
@@ -22,7 +22,7 @@ export default function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 1 }}
-        className="absolute bottom-12"
+        className="absolute bottom-4"
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}

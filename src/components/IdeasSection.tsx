@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ideas } from '@/data/life';
 
@@ -67,8 +67,14 @@ function DetailModal({
 }
 
 export default function IdeasSection() {
-  const [isPaused, setIsPaused] = useState(false);
   const [selectedIdea, setSelectedIdea] = useState<typeof ideas[number] | null>(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number>(0);
+  const lastTimeRef = useRef<number>(0);
+  const dragStart = useRef({ x: 0, scrollLeft: 0 });
 
   // 随机打乱 + 复制以实现无缝循环滚动
   const displayIdeas = useMemo(() => {
@@ -76,8 +82,66 @@ export default function IdeasSection() {
     return [...shuffled, ...shuffled];
   }, []);
 
+  // JS 驱动自动滚动（暂停不重置位置）
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container || isHovering) return;
+
+    lastTimeRef.current = 0;
+    const speed = 35; // 像素/秒
+
+    const animate = (time: number) => {
+      if (lastTimeRef.current === 0) lastTimeRef.current = time;
+      const delta = (time - lastTimeRef.current) / 1000;
+      lastTimeRef.current = time;
+
+      container.scrollLeft += speed * delta;
+
+      // 无缝循环：滚动过半时回跳
+      if (container.scrollLeft >= container.scrollWidth / 2) {
+        container.scrollLeft -= container.scrollWidth / 2;
+      }
+
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    rafRef.current = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [isHovering]);
+
+  // 按住拖动加速滑动
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    setIsDragging(true);
+    dragStart.current = {
+      x: e.clientX,
+      scrollLeft: scrollRef.current?.scrollLeft || 0,
+    };
+  }, []);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const dx = e.clientX - dragStart.current.x;
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = dragStart.current.scrollLeft - dx;
+    }
+  }, [isDragging]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  // 全局 mouseup 兜底（鼠标可能在容器外释放）
+  useEffect(() => {
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => window.removeEventListener('mouseup', handleMouseUp);
+  }, [handleMouseUp]);
+
+  // 阻止拖动时的默认图片拖拽行为
+  const handleDragStart = (e: React.DragEvent) => e.preventDefault();
+
   return (
-    <section className="relative px-6 py-20">
+    <section className="relative px-6 py-12">
       {/* 标题 */}
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
@@ -91,20 +155,30 @@ export default function IdeasSection() {
       {/* 横向滚动卡片区域 */}
       <div className="max-w-4xl mx-auto">
         <div
-          className="overflow-x-auto hide-scrollbar"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
+          ref={scrollRef}
+          className={`overflow-x-auto hide-scrollbar select-none ${
+            isDragging ? 'cursor-grabbing' : 'cursor-grab'
+          }`}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => {
+            setIsHovering(false);
+            setIsDragging(false);
+          }}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onDragStart={handleDragStart}
         >
-          <div
-            className={`flex gap-4 w-max py-2 ${isPaused ? '' : 'animate-marquee'}`}
-          >
+          <div className="flex gap-4 w-max py-2">
             {displayIdeas.map((idea, index) =>
               idea.image ? (
                 // 有图片的卡片 — 类似朋友圈配图
                 <div
                   key={`${idea.id}-${index}`}
-                  onClick={() => setSelectedIdea(idea)}
-                  className="relative min-w-[280px] max-w-[280px] h-[380px] rounded-2xl overflow-hidden flex-shrink-0 cursor-pointer group hover:scale-[1.02] transition-transform duration-300"
+                  onClick={() => {
+                    if (!isDragging) setSelectedIdea(idea);
+                  }}
+                  className="relative min-w-[280px] max-w-[280px] h-[380px] rounded-2xl overflow-hidden flex-shrink-0 group hover:scale-[1.02] transition-transform duration-300"
                 >
                   {/* 背景图片 - 顶部全透明，底部50%可见 */}
                   <div
@@ -120,15 +194,16 @@ export default function IdeasSection() {
                       src={idea.image}
                       alt=""
                       className="w-full h-full object-cover"
+                      draggable={false}
                     />
                   </div>
 
                   {/* 暗色覆盖层 - 顶部略深增强文字可读性 */}
                   <div className="absolute inset-0 bg-gradient-to-b from-universe-bg/60 via-universe-bg/20 to-transparent" />
 
-                  {/* 文字 - 放在上方（图片透明的区域） */}
-                  <div className="relative z-10 p-5 pt-8 h-full flex flex-col">
-                    <p className="text-text-primary text-sm leading-relaxed line-clamp-6">
+                  {/* 文字 - 放在上方，可滚动查看全部 */}
+                  <div className="relative z-10 p-5 pt-8 h-full overflow-y-auto hide-scrollbar">
+                    <p className="text-text-primary text-sm leading-relaxed">
                       {idea.content}
                     </p>
                   </div>
@@ -137,14 +212,16 @@ export default function IdeasSection() {
                   <div className="absolute inset-0 rounded-2xl border border-white/5 group-hover:border-ice-blue/40 transition-colors duration-300 pointer-events-none" />
                 </div>
               ) : (
-                // 无图片的卡片 — 纯文字框
+                // 无图片的卡片 — 纯文字框，显示全文
                 <div
                   key={`${idea.id}-${index}`}
-                  onClick={() => setSelectedIdea(idea)}
+                  onClick={() => {
+                    if (!isDragging) setSelectedIdea(idea);
+                  }}
                   className="glass-card p-5 min-w-[260px] max-w-[260px] cursor-pointer hover:border-ice-blue/40 hover:scale-[1.02] transition-all duration-300 flex-shrink-0"
                   style={{ background: 'rgba(11, 15, 25, 0.5)' }}
                 >
-                  <p className="text-text-primary text-sm leading-relaxed line-clamp-4">
+                  <p className="text-text-primary text-sm leading-relaxed">
                     {idea.content}
                   </p>
                 </div>
