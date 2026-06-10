@@ -90,6 +90,8 @@ export interface Book {
   cover?: string;
   images?: string[];
   links?: Link[];
+  story?: string;    // 我与书的故事
+  quotes?: string[];  // 书籍金句
 }
 
 // 运动
@@ -153,13 +155,29 @@ export const lifeSections: LifeSection[] = [
 ];
 
 // 书籍列表
-export const books: Book[] = [];
+// 添加方法：
+// 1. 把书籍封面图片放到 public/images/life/books/ 文件夹下
+// 2. 填写 cover 字段，如 '/images/life/books/封面.jpg'
+// 3. story 是你与这本书的故事，quotes 是书中的金句（数组，每条一句）
+export const books: Book[] = [
+  {
+    id: 'book-1',
+    title: '你的第一本书',
+    author: '作者名',
+    cover: '/images/life/books/cover1.jpg',
+    story: '在这里写下你与这本书的故事...',
+    quotes: [
+      '书中的金句一',
+      '书中的金句二',
+    ],
+  },
+];
 
 // 运动数据
 export const exercises: Exercise[] = [
   {
     id: 'exercise-1',
-    name: '有氧运动',
+    name: '轻松的',
     target: 4,
     current: 3,
     unit: '次/周',
@@ -174,23 +192,58 @@ export const exercises: Exercise[] = [
       }
     ]
   },
+  {
+    id: 'exercise-2',
+    name: '做完舒服不酸痛',
+    target: 4,
+    current: 3,
+    unit: '次/周',
+    detail: '26.5.1，感觉良好，稍稍出汗',
+    checkCount: 4, // 打卡次数
+    links: [
+      {
+        title: '30钟全身燃脂有氧+无氧HIIT',
+        url: ' https://b23.tv/3Guf2xs',
+        type: 'bilibili',
+        description: ''
+      },
+      {
+        title: '20分钟暴汗燃脂有氧运动,',
+        url: ' https://b23.tv/EIJdQuM',
+        type: 'bilibili',
+        description: ''
+      }
+    ]
+  },
+
 ];
 
 // 运动日志（用于日历展示）
 export const exerciseLogs: ExerciseLog[] = [
   // 5月的运动记录
-  { id: 'log-1', date: '2026-05-02', exerciseId: 'exercise-1', content: '有氧操30分钟', status: 'intense', hasDetail: true },
-  { id: 'log-2', date: '2026-05-04', exerciseId: 'exercise-1', content: '有氧操', status: 'light' },
-  { id: 'log-3', date: '2026-05-07', exerciseId: 'exercise-1', content: '有氧燃脂', status: 'light' },
-  { id: 'log-4', date: '2026-05-09', exerciseId: 'exercise-1', content: '生病休息', status: 'sick', hasDetail: true },
-  { id: 'log-5', date: '2026-05-10', exerciseId: 'exercise-1', content: '休息日', status: 'rest' },
+  { id: 'log-1', date: '2026-05-02', exerciseId: 'exercise-1', content: '', status: 'intense'},
+  { id: 'log-2', date: '2026-05-04', exerciseId: 'exercise-1', content: '', status: 'light' },
+  { id: 'log-3', date: '2026-05-06', exerciseId: 'exercise-1', content: '休息', status: 'light' },
+  { id: 'log-6', date: '2026-05-11', exerciseId: 'exercise-1', content: '', status: 'intense'},
+  { id: 'log-7', date: '2026-05-12', exerciseId: 'exercise-1', content: '', status: 'light' },
+  { id: 'log-8', date: '2026-05-13', exerciseId: 'exercise-1', content: '', status: 'light' },
+  { id: 'log-9', date: '2026-05-15', exerciseId: 'exercise-1', content: '在自习室对着空调吹了一天，回来烧上39了……', status: 'sick', hasDetail: true },
+  { id: 'log-10', date: '2026-05-21', exerciseId: 'exercise-1', content: '尝试锻炼，但练完咳嗽，有点哮喘', status: 'sick', hasDetail: true  },
+  { id: 'log-11', date: '2026-05-22', exerciseId: 'exercise-2', content: '再次尝试，不敢试了', status: 'sick', hasDetail: true },
+  { id: 'log-12', date: '2026-05-25', exerciseId: 'exercise-1', content: '良好', status: 'light', hasDetail: true  },
+  { id: 'log-13', date: '2026-05-27', exerciseId: 'exercise-2', content: '复健', status: 'light' },
+  // 6月
+  { id: 'log-1', date: '2026-06-05', exerciseId: 'exercise-1', content: '散步', status: 'light' },
+  { id: 'log-12', date: '2026-06-06', exerciseId: 'exercise-1', content: '', status: 'light', },
+  { id: 'log-13', date: '2026-06-09', exerciseId: 'exercise-1', content: '散步', status: 'light' },
 ];
 
 // 奇思妙想
 export const ideas: Idea[] = [
   {
     id: 'idea-1',
-    content: '学着学着突然冒出“如果周末两天都在学的话就好了”的愧疚感，吓得我赶紧打了自己一巴掌。休息啊，多么美好的休息，周末当然是休息，没有乱七八糟的东西，只有温暖舒适的床，床边插座和手机，啊如此幸福的休息！如此珍贵的周末！休息两天后今早9点30垂死病中惊坐起，9点50带着bgm进入教室都觉得格外有活力',
+    content: '在牛雨薇20岁的时候，她开始跟随pyl老师学习绘画。然而，她的导师并没有按照常规的方式教授她绘画的技法和理论，也没有让她临摹名画来提升技艺。相反，他只给了牛雨薇一个坐标轴，并要求她在坐标轴上画“X”',
+    image: 'images/life/econ.jpg',
   },
   {
     id: 'idea-2',
@@ -198,7 +251,8 @@ export const ideas: Idea[] = [
   },
   {
     id: 'idea-3',
-    content: '装了一撮茶叶到空的巧克力饼干的袋子，泡出来有一股巧克力的香味(｡- .•)',
+    content: '【胡闹厨房】1.装了一撮茶叶到空的巧克力饼干的袋子，泡出来有一股巧克力的香味。 2.岩茶加红糖会变成红茶吗？ 3.先用沸水泡茶，降温后再倒入奶粉，就可以得到奶茶了。还可以融化一些巧克力进去，美味。  4.五个桂圆+两个话梅+一堆红糖=？？？',
+    image: 'images/life/cook.jpg',
   },
   {
     id: 'idea-4',
@@ -217,19 +271,36 @@ export const ideas: Idea[] = [
   },
   {
     id: 'idea-7',
-    content: '6元椰奶+1元冰块+3元水果+？？？=20元鲜果椰奶清补凉',
+    content: '抬头看，有惊喜（非常成功的广告）',
+    image:'/images/life/tensubway.jpg'
   },
   {
     id: 'idea-8',
-    content: '不合适终究是不合适',
-    image:'/images/life/chazuo.png'
+    content: '越自律，越拖延。与某实验中“小孩坚持15min不吃糖，就能再得到一颗糖作为奖励”类似，我们如果坚持克制工作与学习的欲望，任务清单上就会有吃不完的糖🍬🍬🍬🍬🍬🍬🍬🍬🍬此之谓“可持续发展”！（文艺风：我对求知的敬畏，近乎吝啬。每次只敢在真理的边缘浅尝辄止，唯恐一朝读尽，往后便没了念想。这种“惜读”的艺术，本质上是对未知的长情告白——只要我学得够慢，真理就永远不会离我而去。）',
+    image: '/images/life/daydayup.jpg',
   },
   {
     id: 'idea-9',
-    content: '已经掌握了ai经典的“不是......而是......”安慰句式，例如：你不是在熬夜，而是在为除夕那天的守岁做准备。',
+    content: '大学最有性价比的东西是水果刀，与我一起品尝过苹果的清甜，芒果的多汁，梨的酸涩，番茄乌梅的新奇……还有这个糖分超高的菠萝！！！',
+    image: '/images/life/pinapple.jpg',
   },
   {
     id: 'idea-10',
+    content: '小刘在做作业的时候不小心打翻了墨水，把一道会计分录弄脏了。问被污损的数字是多少。',
+    image:'/images/life/ink.jpg'
+  },
+  {
+    id: 'idea-11',
+    content: '此觉无计可消除，才下眉头，却上心头。——首席睡眠研究师牛雨薇​牛老师本人睡过最舒适的午觉是在冬天的图书馆沙发。吃过午饭，冒着寒风，找到沙发空位，歪好姿势，脱羽绒服，盖在身上留个呼吸口，伴着图书馆的暖气和白噪音睡二三十分钟，比在床上还舒服，此乃上上策。​与此相比，最low与最需要技巧的睡眠方式就是直接趴桌。头放在手肘的位置决定了醒来时手是否会麻、颈椎是否酸痛、眼睛是否看不清东西......此法常年受学界批判，功法不到位极易走火入魔，可谓午休一刻折寿一时。​若有觉友询问，自己在的地方只有桌椅怎么办？无妨无妨，想午睡者，目之所及，无不为床，长桌能卧，大地可躺，倒头即睡，快哉快哉！',
+    image:'/images/life/rest.jpg'
+  },
+  {
+    id: 'idea-12',
+    content: '灵机一动的拖把门闩',
+    image:'/images/life/tuoba.jpg'
+  },
+  {
+    id: 'idea-13',
     content: '抬头看，有惊喜（非常成功的广告）',
     image:'/images/life/tensubway.jpg'
   },
