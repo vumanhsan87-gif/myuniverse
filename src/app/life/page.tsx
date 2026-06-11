@@ -274,16 +274,11 @@ export default function LifePage() {
                 <ExerciseCalendar
                   logs={exerciseLogs}
                   onLogClick={(log) => {
-                    const exercise = exercises.find(e => e.id === log.exerciseId);
-                    if (exercise) {
-                      setSelectedLog(log);
-                      setSelectedItem({
-                        title: exercise.name,
-                        content: exercise.detail,
-                        images: exercise.images,
-                        links: exercise.links,
-                      });
-                    }
+                    setSelectedLog(log);
+                    setSelectedItem({
+                      title: log.title,
+                      content: log.content,
+                    });
                   }}
                 />
               </div>

@@ -8,7 +8,7 @@ const BASE_PATH = ''; // 使用自定义域名时为空
 // ============ 图片和链接的添加方法 ============
 //
 // 【图片】
-// 1. 把图片放到 public/images/life/ 文件夹下（运动图片放 health/，书籍封面放 books/）
+// 1. 把图片放到 public/images/life/ 文件夹下（奇思妙想配图和书籍封面都放这里）
 // 2. 在数据中添加 images 字段，格式：['/images/life/图片文件名.png']
 //    （系统会自动添加 BASE_PATH 前缀）
 //
@@ -98,9 +98,6 @@ export interface Book {
 export interface Exercise {
   id: string;
   name: string;
-  target: number;
-  current: number;
-  unit: string;
   detail?: string;
   images?: string[];
   links?: Link[];
@@ -122,8 +119,8 @@ export type ExerciseStatus = 'rest' | 'light' | 'intense' | 'sick';
 export interface ExerciseLog {
   id: string;
   date: string;       // '2026-05-01'
-  exerciseId: string; // 对应 exercises 中的运动类型
-  content: string;     // 简短记录，如 "跑步3公里"
+  title: string;      // 两字标题，显示在日历格子上
+  content: string;    // 点击展开的拓展详情
   status?: ExerciseStatus; // 运动状态，用于日历颜色标记
   hasDetail?: boolean; // 是否有详情可以点击查看
 }
@@ -156,33 +153,30 @@ export const lifeSections: LifeSection[] = [
 
 // 书籍列表
 // 添加方法：
-// 1. 把书籍封面图片放到 public/images/life/books/ 文件夹下
+// 1. 把书籍封面图片放到 public/images/life/ 文件夹下（和奇思妙想共用）
 // 2. 填写 cover 字段，如 '/images/life/books/封面.jpg'
 // 3. story 是你与这本书的故事，quotes 是书中的金句（数组，每条一句）
 export const books: Book[] = [
   {
     id: 'book-1',
-    title: '你的第一本书',
-    author: '作者名',
-    cover: '/images/life/books/cover1.jpg',
-    story: '在这里写下你与这本书的故事...',
+    title: '伯恩斯新情绪疗法',
+    author: '伯恩斯',
+    cover: '/images/life/book1.jpg',
+    story: '第一段实习的带教一边说“我想你心理肯定很健康的”，一边让我带薪看这本书……美其名曰整理思维模式',
     quotes: [
-      '书中的金句一',
-      '书中的金句二',
+      '情绪源于思维。一些负面情绪源于对事件的认知扭曲',
+      '“认同上瘾症”：如果你重视的人不认同你，你就会痛苦不堪 → 事实上你必须先相信别人的批评。',
     ],
   },
 ];
 
-// 运动数据
+// 运动数据（只记录运动类型和链接，不做目标追踪）
 export const exercises: Exercise[] = [
   {
     id: 'exercise-1',
     name: '轻松的',
-    target: 4,
-    current: 3,
-    unit: '次/周',
     detail: '26.5.1，感觉良好，稍稍出汗',
-    checkCount: 4, // 打卡次数
+    checkCount: 4,
     links: [
       {
         title: '30分钟全程站立有氧燃脂操',
@@ -195,11 +189,8 @@ export const exercises: Exercise[] = [
   {
     id: 'exercise-2',
     name: '做完舒服不酸痛',
-    target: 4,
-    current: 3,
-    unit: '次/周',
     detail: '26.5.1，感觉良好，稍稍出汗',
-    checkCount: 4, // 打卡次数
+    checkCount: 4,
     links: [
       {
         title: '30钟全身燃脂有氧+无氧HIIT',
@@ -215,27 +206,34 @@ export const exercises: Exercise[] = [
       }
     ]
   },
+  {
+    id: 'exercise-3',
+    name: '休息',
+    checkCount: 0,
+  },
 
 ];
 
 // 运动日志（用于日历展示）
+// title: 两字标题显示在日历格子上，content: 点击展开的拓展详情
 export const exerciseLogs: ExerciseLog[] = [
   // 5月的运动记录
-  { id: 'log-1', date: '2026-05-02', exerciseId: 'exercise-1', content: '', status: 'intense'},
-  { id: 'log-2', date: '2026-05-04', exerciseId: 'exercise-1', content: '', status: 'light' },
-  { id: 'log-3', date: '2026-05-06', exerciseId: 'exercise-1', content: '休息', status: 'light' },
-  { id: 'log-6', date: '2026-05-11', exerciseId: 'exercise-1', content: '', status: 'intense'},
-  { id: 'log-7', date: '2026-05-12', exerciseId: 'exercise-1', content: '', status: 'light' },
-  { id: 'log-8', date: '2026-05-13', exerciseId: 'exercise-1', content: '', status: 'light' },
-  { id: 'log-9', date: '2026-05-15', exerciseId: 'exercise-1', content: '在自习室对着空调吹了一天，回来烧上39了……', status: 'sick', hasDetail: true },
-  { id: 'log-10', date: '2026-05-21', exerciseId: 'exercise-1', content: '尝试锻炼，但练完咳嗽，有点哮喘', status: 'sick', hasDetail: true  },
-  { id: 'log-11', date: '2026-05-22', exerciseId: 'exercise-2', content: '再次尝试，不敢试了', status: 'sick', hasDetail: true },
-  { id: 'log-12', date: '2026-05-25', exerciseId: 'exercise-1', content: '良好', status: 'light', hasDetail: true  },
-  { id: 'log-13', date: '2026-05-27', exerciseId: 'exercise-2', content: '复健', status: 'light' },
+  { id: 'log-1', date: '2026-05-02', title: '爽', content: '', status: 'intense'},
+  { id: 'log-2', date: '2026-05-04', title: '爽', content: '', status: 'light' },
+  { id: 'log-3', date: '2026-05-06', title: '月经', content: '', status: 'rest' },
+  { id: 'log-6', date: '2026-05-11', title: '爽', content: '', status: 'intense'},
+  { id: 'log-7', date: '2026-05-12', title: '爽', content: '', status: 'light' },
+  { id: 'log-8', date: '2026-05-13', title: '爽', content: '', status: 'light' },
+  { id: 'log-9', date: '2026-05-15', title: '生病', content: '在自习室对着空调吹了一天，回来烧上39了……', status: 'sick', hasDetail: true },
+  { id: 'log-10', date: '2026-05-21', title: '不适', content: '尝试锻炼，但练完咳嗽，有点哮喘', status: 'sick', hasDetail: true  },
+  { id: 'log-11', date: '2026-05-22', title: '不适', content: '再次尝试，不敢试了', status: 'sick', hasDetail: true },
+  { id: 'log-12', date: '2026-05-25', title: '复健', content: '感觉良好', status: 'light', hasDetail: true  },
+  { id: 'log-13', date: '2026-05-27', title: '复健', content: '差不多恢复了', status: 'light' },
   // 6月
-  { id: 'log-1', date: '2026-06-05', exerciseId: 'exercise-1', content: '散步', status: 'light' },
-  { id: 'log-12', date: '2026-06-06', exerciseId: 'exercise-1', content: '', status: 'light', },
-  { id: 'log-13', date: '2026-06-09', exerciseId: 'exercise-1', content: '散步', status: 'light' },
+  { id: 'log-14', date: '2026-06-05', title: '散步', content: '散步', status: 'light' },
+  { id: 'log-15', date: '2026-06-06', title: '爽', content: '步入正轨', status: 'light', },
+  { id: 'log-16', date: '2026-06-09', title: '散步', content: '', status: 'light' },
+  { id: 'log-17', date: '2026-06-10', title: '散步', content: '', status: 'light' },
 ];
 
 // 奇思妙想

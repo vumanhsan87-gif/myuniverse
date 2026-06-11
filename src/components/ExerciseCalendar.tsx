@@ -90,7 +90,7 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
   const handleDayClick = (day: number) => {
     const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const log = logMap[dateStr];
-    if (log && log.hasDetail) {
+    if (log && log.content) {
       onLogClick(log);
     }
   };
@@ -163,7 +163,7 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
                   aspect-square rounded flex flex-col items-center justify-center relative
                   transition-all duration-200
                   ${log ? 'cursor-pointer' : ''}
-                  ${log?.hasDetail ? 'border border-life-primary/30' : ''}
+                  ${log?.content ? 'border border-life-primary/30' : ''}
                   ${isToday ? 'ring-1 ring-life-primary' : ''}
                   ${log ? 'hover:bg-life-primary/20' : ''}
                 `}
@@ -178,13 +178,13 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
                 }`}>
                   {day}
                 </span>
-                {log && (
+                {log && log.title && (
                   <span className={`text-xs truncate max-w-full ${
-                    log.hasDetail
+                    log.content
                       ? 'text-life-primary animate-pulse'
                       : 'text-text-secondary'
                   }`}>
-                    {log.content.length > 4 ? log.content.slice(0, 3) + '…' : log.content}
+                    {log.title}
                   </span>
                 )}
               </motion.div>
