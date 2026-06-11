@@ -64,6 +64,18 @@ function DetailModal({
         className="glass-card max-w-4xl w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* 封面图 — 干净完整，无渐变 */}
+        {item.images && item.images[0] && (
+          <div className="relative w-full aspect-[16/9] overflow-hidden rounded-t-2xl">
+            <Image
+              src={getImagePath(item.images[0])}
+              alt={item.title}
+              fill
+              className="object-cover"
+            />
+          </div>
+        )}
+
         {/* 头部 */}
         <div className="flex items-start justify-between p-8 pb-0">
           <div>
@@ -152,17 +164,17 @@ function DetailModal({
           </div>
         )}
 
-        {/* 图片展示 */}
-        {item.images && item.images.length > 0 && (
+        {/* 其他图片展示（跳过已用作封面的第一张） */}
+        {item.images && item.images.length > 1 && (
           <div className="px-8 pb-4">
             <div className="border-t border-white/5 pt-6">
               <h3 className="text-sm text-text-muted mb-3">相关图片</h3>
               <div className="grid grid-cols-2 gap-3">
-                {item.images.map((img, i) => (
+                {item.images.slice(1).map((img, i) => (
                   <div key={i} className="relative aspect-video rounded-lg overflow-hidden">
                     <Image
                       src={getImagePath(img)}
-                      alt={`图片 ${i + 1}`}
+                      alt={`图片 ${i + 2}`}
                       fill
                       className="object-cover"
                     />
@@ -237,8 +249,23 @@ export default function AcademicPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="glass-card hover:glow-orange transition-all duration-300 group"
+              className="glass-card hover:glow-orange transition-all duration-300 group overflow-hidden"
             >
+              {/* 封面图 — 干净完整，无渐变无模糊 */}
+              {item.images && item.images[0] && (
+                <div
+                  onClick={() => setSelectedItem(item)}
+                  className="relative w-full aspect-[16/9] overflow-hidden cursor-pointer"
+                >
+                  <Image
+                    src={getImagePath(item.images[0])}
+                    alt={item.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              )}
+
               <div
                 onClick={() => setSelectedItem(item)}
                 className="p-6 cursor-pointer"

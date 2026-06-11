@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { type ExerciseLog, type ExerciseStatus } from '@/data/life';
 
@@ -27,39 +27,32 @@ function StarIcon({ color }: { color: string }) {
   );
 }
 
+const weekdayLabels = ['日', '一', '二', '三', '四', '五', '六'];
+
+// 根据日志数据自动推断需要显示的月份
+function inferMonths(logs: ExerciseLog[]): string[] {
+  if (logs.length === 0) {
+    // 无数据时显示上个月和本月
+    const now = new Date();
+    const thisMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const prevMonth = `${prev.getFullYear()}-${String(prev.getMonth() + 1).padStart(2, '0')}`;
+    return [prevMonth, thisMonth];
+  }
+
+  // 从日志中提取所有不重复月份，按时间排序取最近两个
+  const months = [...new Set(logs.map(l => l.date.substring(0, 7)))].sort();
+  if (months.length <= 2) return months;
+  return months.slice(-2);
+}
+
 interface ExerciseCalendarProps {
   logs: ExerciseLog[];
   onLogClick: (log: ExerciseLog) => void;
 }
 
 export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarProps) {
-  const [currentMonth, setCurrentMonth] = useState('2026-05');
-
-  // 解析当前月份
-  const [year, month] = currentMonth.split('-').map(Number);
-
-  // 生成日历数据
-  const calendarDays = useMemo(() => {
-    const firstDay = new Date(year, month - 1, 1);
-    const lastDay = new Date(year, month, 0);
-    const startWeekday = firstDay.getDay();
-    const daysInMonth = lastDay.getDate();
-
-    // 构建日期矩阵
-    const days: (number | null)[] = [];
-
-    // 填充月初空白
-    for (let i = 0; i < startWeekday; i++) {
-      days.push(null);
-    }
-
-    // 填充日期
-    for (let i = 1; i <= daysInMonth; i++) {
-      days.push(i);
-    }
-
-    return days;
-  }, [year, month]);
+  const displayMonths = useMemo(() => inferMonths(logs), [logs]);
 
   // 按日期索引日志
   const logMap = useMemo(() => {
@@ -70,128 +63,100 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
     return map;
   }, [logs]);
 
-  // 月份切换
-  const goToPrevMonth = () => {
-    if (month === 1) {
-      setCurrentMonth(`${year - 1}-12`);
-    } else {
-      setCurrentMonth(`${year}-${String(month - 1).padStart(2, '0')}`);
-    }
-  };
-
-  const goToNextMonth = () => {
-    if (month === 12) {
-      setCurrentMonth(`${year + 1}-01`);
-    } else {
-      setCurrentMonth(`${year}-${String(month + 1).padStart(2, '0')}`);
-    }
-  };
-
-  const handleDayClick = (day: number) => {
-    const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    const log = logMap[dateStr];
-    if (log && log.content) {
-      onLogClick(log);
-    }
-  };
-
-  const weekdayLabels = ['日', '一', '二', '三', '四', '五', '六'];
-
   return (
-    <div className="w-full">
-      {/* 标题和月份导航 */}
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-life-primary text-sm">运动打卡日历</span>
-        <div className="flex items-center gap-1">
-          <button
-            onClick={goToPrevMonth}
-            className="p-1 glass-card hover:border-life-primary/50 transition-colors"
-          >
-            <svg className="w-3 h-3 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <span className="text-text-primary font-medium text-xs min-w-[60px] text-center">
-            {year}.{month}
-          </span>
-          <button
-            onClick={goToNextMonth}
-            className="p-1 glass-card hover:border-life-primary/50 transition-colors"
-          >
-            <svg className="w-3 h-3 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-      </div>
+    <div className="w-full space-y-3">
+      {/* 标题 */}
+      <span className="text-life-primary text-sm">运动打卡日历</span>
 
-      {/* 日历网格 */}
-      <div className="glass-card p-2">
-        {/* 星期标题 */}
-        <div className="grid grid-cols-7 gap-1 mb-1">
-          {weekdayLabels.map((label, i) => (
-            <div
-              key={label}
-              className={`text-center text-xs py-1 ${
-                i === 0 || i === 6 ? 'text-life-primary' : 'text-text-muted'
-              }`}
-            >
-              {label}
+      {displayMonths.map((currentMonth) => {
+        const [year, month] = currentMonth.split('-').map(Number);
+
+        // 生成该月日历数据
+        const firstDay = new Date(year, month - 1, 1);
+        const lastDay = new Date(year, month, 0);
+        const startWeekday = firstDay.getDay();
+        const daysInMonth = lastDay.getDate();
+
+        const calendarDays: (number | null)[] = [];
+        for (let i = 0; i < startWeekday; i++) calendarDays.push(null);
+        for (let i = 1; i <= daysInMonth; i++) calendarDays.push(i);
+
+        return (
+          <div key={currentMonth} className="glass-card p-2">
+            {/* 月份标签 */}
+            <div className="text-text-primary font-medium text-xs text-center mb-1">
+              {year}.{month}
             </div>
-          ))}
-        </div>
 
-        {/* 日期格子 */}
-        <div className="grid grid-cols-7 gap-1">
-          {calendarDays.map((day, index) => {
-            if (day === null) {
-              return <div key={`empty-${index}`} className="aspect-square" />;
-            }
+            {/* 星期标题 */}
+            <div className="grid grid-cols-7 gap-1 mb-1">
+              {weekdayLabels.map((label, i) => (
+                <div
+                  key={label}
+                  className={`text-center text-xs py-1 ${
+                    i === 0 || i === 6 ? 'text-life-primary' : 'text-text-muted'
+                  }`}
+                >
+                  {label}
+                </div>
+              ))}
+            </div>
 
-            const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const log = logMap[dateStr];
-            const isToday = dateStr === '2026-05-10';
-            const colors = statusColors[log?.status || 'rest'];
+            {/* 日期格子 */}
+            <div className="grid grid-cols-7 gap-1">
+              {calendarDays.map((day, index) => {
+                if (day === null) {
+                  return <div key={`${currentMonth}-empty-${index}`} className="aspect-square" />;
+                }
 
-            return (
-              <motion.div
-                key={dateStr}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.01 }}
-                className={`
-                  aspect-square rounded flex flex-col items-center justify-center relative
-                  transition-all duration-200
-                  ${log ? 'cursor-pointer' : ''}
-                  ${log?.content ? 'border border-life-primary/30' : ''}
-                  ${isToday ? 'ring-1 ring-life-primary' : ''}
-                  ${log ? 'hover:bg-life-primary/20' : ''}
-                `}
-                style={colors.bg ? { backgroundColor: colors.bg } : undefined}
-                onClick={() => log && handleDayClick(day)}
-              >
-                {/* 发光星星 */}
-                {log && colors.star && <StarIcon color={colors.star} />}
+                const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const log = logMap[dateStr];
+                const isToday = dateStr === '2026-06-11';
+                const colors = statusColors[log?.status || 'rest'];
 
-                <span className={`text-xs font-medium ${
-                  log ? (log.hasDetail ? 'text-life-primary' : 'text-text-primary') : 'text-text-muted'
-                }`}>
-                  {day}
-                </span>
-                {log && log.title && (
-                  <span className={`text-xs truncate max-w-full ${
-                    log.content
-                      ? 'text-life-primary animate-pulse'
-                      : 'text-text-secondary'
-                  }`}>
-                    {log.title}
-                  </span>
-                )}
-              </motion.div>
-            );
-          })}
-        </div>
-      </div>
+                return (
+                  <motion.div
+                    key={dateStr}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.01 }}
+                    className={`
+                      aspect-square rounded flex flex-col items-center justify-center relative
+                      transition-all duration-200
+                      ${log ? 'cursor-pointer' : ''}
+                      ${log?.content ? 'border border-life-primary/30' : ''}
+                      ${isToday ? 'ring-1 ring-life-primary' : ''}
+                      ${log ? 'hover:bg-life-primary/20' : ''}
+                    `}
+                    style={colors.bg ? { backgroundColor: colors.bg } : undefined}
+                    onClick={() => {
+                      if (log && log.content) onLogClick(log);
+                    }}
+                  >
+                    {/* 发光星星 */}
+                    {log && colors.star && <StarIcon color={colors.star} />}
+
+                    <span className={`text-xs font-medium ${
+                      log ? (log.hasDetail ? 'text-life-primary' : 'text-text-primary') : 'text-text-muted'
+                    }`}>
+                      {day}
+                    </span>
+                    {log && log.title && (
+                      <span className={`text-xs truncate max-w-full ${
+                        log.content
+                          ? 'text-life-primary animate-pulse'
+                          : 'text-text-secondary'
+                      }`}>
+                        {log.title}
+                      </span>
+                    )}
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
