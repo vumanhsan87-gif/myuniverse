@@ -63,20 +63,8 @@ function DetailModal({
         className="glass-card max-w-4xl w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* PDF 第一页预览 — 不可滑动 */}
-        {item.pdf && (
-          <div className="w-full aspect-[3/4] overflow-hidden rounded-t-2xl bg-white">
-            <iframe
-              src={`${item.pdf}#toolbar=0&navpanes=0&scrollbar=0`}
-              className="w-full h-full"
-              style={{ border: 'none', pointerEvents: 'none' }}
-              title={item.title}
-            />
-          </div>
-        )}
-
         {/* 头部 */}
-        <div className="flex items-start justify-between p-8 pb-0">
+        <div className="flex items-start justify-between p-8 pb-2">
           <div>
             <h2 className="text-2xl font-bold text-text-primary mb-2">
               {item.title}
@@ -229,18 +217,22 @@ export default function AcademicPage() {
               transition={{ delay: index * 0.1 }}
               className="glass-card hover:glow-orange transition-all duration-300 group overflow-hidden"
             >
-              {/* PDF 第一页预览 — 替代封面图，不可滑动 */}
+              {/* PDF 第一页预览 — iframe 超宽裁剪掉右侧滚动条 */}
               {item.pdf && (
                 <div
                   onClick={() => setSelectedItem(item)}
-                  className="w-full aspect-[3/4] overflow-hidden cursor-pointer relative bg-white"
+                  className="w-full aspect-[3/4] overflow-hidden cursor-pointer relative bg-white rounded-t-2xl"
                 >
                   <iframe
                     src={`${item.pdf}#toolbar=0&navpanes=0&scrollbar=0`}
-                    className="w-full h-full group-hover:scale-105 transition-transform duration-500"
-                    style={{ border: 'none', pointerEvents: 'none' }}
+                    className="absolute top-0 left-0 group-hover:scale-105 transition-transform duration-500"
+                    style={{
+                      border: 'none',
+                      pointerEvents: 'none',
+                      width: 'calc(100% + 28px)',
+                      height: '100%',
+                    }}
                     title={item.title}
-                    scrolling="no"
                   />
                 </div>
               )}
