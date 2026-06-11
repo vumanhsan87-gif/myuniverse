@@ -101,7 +101,6 @@ export interface Exercise {
   detail?: string;
   images?: string[];
   links?: Link[];
-  checkCount?: number; // 打卡次数
 }
 
 // 奇思妙想
@@ -143,12 +142,6 @@ export const lifeSections: LifeSection[] = [
     icon: '💪',
     description: '饮食与运动的平衡艺术',
   },
-  {
-    id: 'ideas',
-    title: '满船清梦压星河',
-    icon: '✨',
-    description: '脑洞与灵感的星辰大海',
-  },
 ];
 
 // 书籍列表
@@ -175,8 +168,7 @@ export const exercises: Exercise[] = [
   {
     id: 'exercise-1',
     name: '轻松的',
-    detail: '26.5.1，感觉良好，稍稍出汗',
-    checkCount: 4,
+    detail: '',
     links: [
       {
         title: '30分钟全程站立有氧燃脂操',
@@ -189,8 +181,7 @@ export const exercises: Exercise[] = [
   {
     id: 'exercise-2',
     name: '做完舒服不酸痛',
-    detail: '26.5.1，感觉良好，稍稍出汗',
-    checkCount: 4,
+    detail: '',
     links: [
       {
         title: '30钟全身燃脂有氧+无氧HIIT',
@@ -209,7 +200,6 @@ export const exercises: Exercise[] = [
   {
     id: 'exercise-3',
     name: '休息',
-    checkCount: 0,
   },
 
 ];

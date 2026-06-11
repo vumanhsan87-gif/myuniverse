@@ -94,7 +94,7 @@ function DetailModal({
 
         <div className="px-8 pt-4 pb-2">
           {/* 描述 */}
-          <p className="text-text-secondary leading-relaxed mb-4">
+          <p className="text-text-secondary leading-relaxed mb-4 whitespace-pre-wrap">
             {item.description}
           </p>
 

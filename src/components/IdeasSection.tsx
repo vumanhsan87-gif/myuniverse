@@ -149,7 +149,7 @@ export default function IdeasSection() {
         viewport={{ once: true }}
         className="text-2xl text-text-secondary mb-8 tracking-widest text-center"
       >
-        随机奇思妙想
+        满船清梦压星河
       </motion.h2>
 
       {/* 横向滚动卡片区域 */}

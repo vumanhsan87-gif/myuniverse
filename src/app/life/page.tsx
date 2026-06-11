@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useState } from 'react';
-import { lifeSections, books, exerciseLogs, ideas, type Link, type Book, getImagePath } from '@/data/life';
+import { lifeSections, books, exerciseLogs, type Link, type Book, getImagePath } from '@/data/life';
 import ExerciseCalendar from '@/components/ExerciseCalendar';
 import { exercises, type ExerciseLog } from '@/data/life';
 
@@ -287,20 +287,14 @@ export default function LifePage() {
                   <h3 className="text-sm text-text-muted mb-3">运动链接</h3>
                   <div className="space-y-3">
                     {exercises
-                      .sort((a, b) => (b.checkCount || 0) - (a.checkCount || 0))
                       .map((exercise) => (
                         <div key={exercise.id} className="glass-card p-3 hover:border-life-primary/50 transition-colors">
-                          <div className="flex items-center gap-3 mb-2">
-                            <span className="text-life-primary font-bold text-sm w-8">
-                              {exercise.checkCount || 0}次
-                            </span>
-                            <p className="text-text-primary text-sm font-medium">{exercise.name}</p>
-                          </div>
+                          <p className="text-text-primary text-sm font-medium mb-1">{exercise.name}</p>
                           {exercise.detail && (
-                            <p className="text-text-secondary text-xs leading-relaxed ml-11">{exercise.detail}</p>
+                            <p className="text-text-secondary text-xs leading-relaxed">{exercise.detail}</p>
                           )}
                           {exercise.links && exercise.links.length > 0 && (
-                            <div className="ml-11 mt-2">
+                            <div className="mt-2">
                               {exercise.links.map((link, i) => (
                                 <a key={i} href={link.url} target="_blank" rel="noopener noreferrer"
                                   className="text-life-primary text-xs hover:underline block">
@@ -368,7 +362,7 @@ export default function LifePage() {
                   {item.cover ? (
                     <>
                       {/* 封面图片 — object-cover 处理不同尺寸 */}
-                      <div className="relative w-full aspect-[3/4]">
+                      <div className="relative w-full aspect-[4/5]">
                         <img
                           src={getImagePath(item.cover)}
                           alt={item.title}
@@ -401,29 +395,10 @@ export default function LifePage() {
               </motion.div>
             ))}
 
-          {/* 奇思妙想 */}
-          {(activeSection === 'all' || activeSection === 'ideas') &&
-            ideas.map((item, index) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                onClick={() => setSelectedItem({
-                  title: item.content.length > 20 ? item.content.slice(0, 20) + '...' : item.content,
-                  content: item.detail || item.content,
-                })}
-                className="glass-card p-6 hover:glow-green transition-all duration-300 cursor-pointer group mb-4 break-inside-avoid"
-              >
-                <p className="text-text-primary leading-relaxed group-hover:text-life-primary transition-colors">
-                  {item.content}
-                </p>
-              </motion.div>
-            ))}
         </div>
 
         {/* 空状态 */}
-        {books.length === 0 && ideas.length === 0 && (
+        {books.length === 0 && (
           <div className="text-center py-20">
             <p className="text-text-muted">暂无相关内容</p>
           </div>
