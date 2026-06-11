@@ -63,26 +63,32 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
     return map;
   }, [logs]);
 
+  // 预计算每月日历数据
+  const monthData = useMemo(() => {
+    return displayMonths.map(currentMonth => {
+      const [year, month] = currentMonth.split('-').map(Number);
+      const firstDay = new Date(year, month - 1, 1);
+      const lastDay = new Date(year, month, 0);
+      const startWeekday = firstDay.getDay();
+      const daysInMonth = lastDay.getDate();
+
+      const calendarDays: (number | null)[] = [];
+      for (let i = 0; i < startWeekday; i++) calendarDays.push(null);
+      for (let i = 1; i <= daysInMonth; i++) calendarDays.push(i);
+
+      return { year, month, currentMonth, calendarDays };
+    });
+  }, [displayMonths]);
+
   return (
-    <div className="w-full space-y-3">
+    <div className="w-full">
       {/* 标题 */}
-      <span className="text-life-primary text-sm">运动打卡日历</span>
+      <span className="text-life-primary text-sm block mb-2">运动打卡日历</span>
 
-      {displayMonths.map((currentMonth) => {
-        const [year, month] = currentMonth.split('-').map(Number);
-
-        // 生成该月日历数据
-        const firstDay = new Date(year, month - 1, 1);
-        const lastDay = new Date(year, month, 0);
-        const startWeekday = firstDay.getDay();
-        const daysInMonth = lastDay.getDate();
-
-        const calendarDays: (number | null)[] = [];
-        for (let i = 0; i < startWeekday; i++) calendarDays.push(null);
-        for (let i = 1; i <= daysInMonth; i++) calendarDays.push(i);
-
-        return (
-          <div key={currentMonth} className="glass-card p-2">
+      {/* 两个月左右并排 */}
+      <div className="flex gap-2">
+        {monthData.map(({ year, month, currentMonth, calendarDays }) => (
+          <div key={currentMonth} className="glass-card p-2 flex-1 min-w-0">
             {/* 月份标签 */}
             <div className="text-text-primary font-medium text-xs text-center mb-1">
               {year}.{month}
@@ -133,9 +139,7 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
                       if (log && log.content) onLogClick(log);
                     }}
                   >
-                    {/* 发光星星 */}
                     {log && colors.star && <StarIcon color={colors.star} />}
-
                     <span className={`text-xs font-medium ${
                       log ? (log.hasDetail ? 'text-life-primary' : 'text-text-primary') : 'text-text-muted'
                     }`}>
@@ -155,8 +159,8 @@ export default function ExerciseCalendar({ logs, onLogClick }: ExerciseCalendarP
               })}
             </div>
           </div>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 }

@@ -270,7 +270,7 @@ export default function LifePage() {
             className="w-full mb-8"
           >
             <div className="flex gap-6 items-stretch">
-              <div className="w-[300px] flex-shrink-0">
+              <div className="flex-1 min-w-0">
                 <ExerciseCalendar
                   logs={exerciseLogs}
                   onLogClick={(log) => {
@@ -282,7 +282,7 @@ export default function LifePage() {
                   }}
                 />
               </div>
-              <div className="flex-1">
+              <div className="w-[220px] flex-shrink-0">
                 <div className="glass-card p-4 h-full overflow-y-auto">
                   <h3 className="text-sm text-text-muted mb-3">运动链接</h3>
                   <div className="space-y-3">

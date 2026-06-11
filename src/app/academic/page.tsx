@@ -1,7 +1,6 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import { useState } from 'react';
 import { academicItems, tags, type AcademicItem, type Link, getImagePath } from '@/data/academic';
 
@@ -66,12 +65,11 @@ function DetailModal({
       >
         {/* 封面图 — 干净完整，无渐变 */}
         {item.images && item.images[0] && (
-          <div className="relative w-full aspect-[16/9] overflow-hidden rounded-t-2xl">
-            <Image
+          <div className="w-full aspect-[3/4] overflow-hidden rounded-t-2xl">
+            <img
               src={getImagePath(item.images[0])}
               alt={item.title}
-              fill
-              className="object-cover"
+              className="w-full h-full object-cover"
             />
           </div>
         )}
@@ -171,12 +169,11 @@ function DetailModal({
               <h3 className="text-sm text-text-muted mb-3">相关图片</h3>
               <div className="grid grid-cols-2 gap-3">
                 {item.images.slice(1).map((img, i) => (
-                  <div key={i} className="relative aspect-video rounded-lg overflow-hidden">
-                    <Image
+                  <div key={i} className="aspect-video rounded-lg overflow-hidden">
+                    <img
                       src={getImagePath(img)}
                       alt={`图片 ${i + 2}`}
-                      fill
-                      className="object-cover"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 ))}
@@ -251,17 +248,16 @@ export default function AcademicPage() {
               transition={{ delay: index * 0.1 }}
               className="glass-card hover:glow-orange transition-all duration-300 group overflow-hidden"
             >
-              {/* 封面图 — 干净完整，无渐变无模糊 */}
+              {/* 封面图 — 干净完整，3:4 统一尺寸 */}
               {item.images && item.images[0] && (
                 <div
                   onClick={() => setSelectedItem(item)}
-                  className="relative w-full aspect-[16/9] overflow-hidden cursor-pointer"
+                  className="w-full aspect-[3/4] overflow-hidden cursor-pointer"
                 >
-                  <Image
+                  <img
                     src={getImagePath(item.images[0])}
                     alt={item.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
               )}
