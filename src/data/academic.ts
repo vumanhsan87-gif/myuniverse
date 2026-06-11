@@ -116,7 +116,6 @@ export const academicItems: AcademicItem[] = [
     description: '关于大学什么东西最闹心？小组作业当之无愧。当然，我认为我们不喜欢的并不是作业本身，而是作业与成绩挂钩这一机制——当你的个人成绩有一部分会取决于他人的努力时，小组作业就变得不那么纯粹了，它逐渐成为人性测试与心理博弈。作为一名资深的小组作业玩家，本人痛定思痛，总结了这套实战指南。本项目获教务处主办的学业经验分享征稿活动三等奖。',
     date: '2024-2026',
     tags: ['methodology', 'org'],
-    images: ['/images/academic/group_work.jpg'],
     pdf: '/刘宇微-优雅完成小组作业-word（防止word格式错乱）.pdf',
   },
   {
@@ -128,7 +127,6 @@ export const academicItems: AcademicItem[] = [
 到此为止，权力的不平衡已经建立。我们同意无偿让对方收集我们的个人信息，并用于我们无法想象的规模层面，获取商业利益；我们无法追溯自己的数据是否被用于模型训练，罗尔斯在”无知之幕”中强调的信息对等、公平正义不复存在。`,
     date: '2025.06',
     tags: ['methodology', 'org'],
-    images: ['/images/academic/openai.jpg'],
     pdf: '/隐私是科技进步的必然牺牲品吗？.pdf',
   },
 ];

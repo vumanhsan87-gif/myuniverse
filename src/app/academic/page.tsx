@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
-import { academicItems, tags, type AcademicItem, type Link, getImagePath } from '@/data/academic';
+import { academicItems, tags, type AcademicItem, type Link } from '@/data/academic';
 
 // 获取链接图标
 function LinkIcon({ type }: { type?: string }) {
@@ -63,13 +63,14 @@ function DetailModal({
         className="glass-card max-w-4xl w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 封面图 — 干净完整，无渐变 */}
-        {item.images && item.images[0] && (
-          <div className="w-full aspect-[3/4] overflow-hidden rounded-t-2xl">
-            <img
-              src={getImagePath(item.images[0])}
-              alt={item.title}
-              className="w-full h-full object-cover"
+        {/* PDF 第一页预览 — 不可滑动 */}
+        {item.pdf && (
+          <div className="w-full aspect-[3/4] overflow-hidden rounded-t-2xl bg-white">
+            <iframe
+              src={`${item.pdf}#toolbar=0&navpanes=0&scrollbar=0`}
+              className="w-full h-full"
+              style={{ border: 'none', pointerEvents: 'none' }}
+              title={item.title}
             />
           </div>
         )}
@@ -162,26 +163,6 @@ function DetailModal({
           </div>
         )}
 
-        {/* 其他图片展示（跳过已用作封面的第一张） */}
-        {item.images && item.images.length > 1 && (
-          <div className="px-8 pb-4">
-            <div className="border-t border-white/5 pt-6">
-              <h3 className="text-sm text-text-muted mb-3">相关图片</h3>
-              <div className="grid grid-cols-2 gap-3">
-                {item.images.slice(1).map((img, i) => (
-                  <div key={i} className="aspect-video rounded-lg overflow-hidden">
-                    <img
-                      src={getImagePath(img)}
-                      alt={`图片 ${i + 2}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* 链接展示 */}
         {item.links && item.links.length > 0 && (
           <div className="px-8 pb-8">
@@ -248,16 +229,18 @@ export default function AcademicPage() {
               transition={{ delay: index * 0.1 }}
               className="glass-card hover:glow-orange transition-all duration-300 group overflow-hidden"
             >
-              {/* 封面图 — 干净完整，3:4 统一尺寸 */}
-              {item.images && item.images[0] && (
+              {/* PDF 第一页预览 — 替代封面图，不可滑动 */}
+              {item.pdf && (
                 <div
                   onClick={() => setSelectedItem(item)}
-                  className="w-full aspect-[3/4] overflow-hidden cursor-pointer"
+                  className="w-full aspect-[3/4] overflow-hidden cursor-pointer relative bg-white"
                 >
-                  <img
-                    src={getImagePath(item.images[0])}
-                    alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  <iframe
+                    src={`${item.pdf}#toolbar=0&navpanes=0&scrollbar=0`}
+                    className="w-full h-full group-hover:scale-105 transition-transform duration-500"
+                    style={{ border: 'none', pointerEvents: 'none' }}
+                    title={item.title}
+                    scrolling="no"
                   />
                 </div>
               )}
