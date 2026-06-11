@@ -223,7 +223,7 @@ export default function AcademicPage() {
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-6">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* 页面标题 */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -238,8 +238,8 @@ export default function AcademicPage() {
           </p>
         </motion.div>
 
-        {/* 内容卡片 */}
-        <div className="space-y-4">
+        {/* 内容卡片 — 三列网格 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {academicItems.map((item, index) => (
             <motion.div
               key={item.id}
